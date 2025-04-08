@@ -10,7 +10,9 @@ module org.example.cardcollectorproject {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.desktop;
 
     opens org.example.cardcollectorproject to javafx.fxml;
+    opens org.example.cardcollectorproject.controllers to javafx.fxml;
     exports org.example.cardcollectorproject;
 }
