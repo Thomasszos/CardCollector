@@ -9,13 +9,16 @@ module org.example.cardcollectorproject {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
-    requires java.net.http;  // Added for HTTP Client API
-    requires com.google.gson;
-    requires java.smartcardio; // Added for Gson
 
-    // Allow reflection into your package for both FXML and Gson if needed
+    // Combined requirements
+    requires java.desktop;
+    requires java.net.http;
+    requires com.google.gson;
+    requires java.smartcardio;
+
+    // Combined opens/exports
     opens org.example.cardcollectorproject to javafx.fxml, com.google.gson;
+    opens org.example.cardcollectorproject.controllers to javafx.fxml, com.google.gson;
     exports org.example.cardcollectorproject;
     exports org.example.cardcollectorproject.controllers;
-    opens org.example.cardcollectorproject.controllers to com.google.gson, javafx.fxml;
 }

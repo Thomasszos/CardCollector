@@ -1,0 +1,119 @@
+
+/* Main container styling */
+.main-container {
+    -fx-padding: 20;
+    -fx-spacing: 20;
+    -fx-max-width: 400;
+    -fx-alignment: center;
+}
+
+/* Welcome text styling */
+.welcome-text {
+    -fx-font-size: 36px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-family: 'Geostar Fill';
+}
+
+/* Button group styling */
+.button-group {
+    -fx-spacing: 20;
+    -fx-padding: 10;
+    -fx-alignment: center;
+}
+
+/* Auth button styles */
+.auth-button {
+    -fx-background-color: transparent;
+    -fx-border-color: white;
+    -fx-border-radius: 5;
+    -fx-text-fill: white;
+    -fx-min-width: 120;
+    -fx-max-width: 120;
+    -fx-font-family: 'Geostar Fill';
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.auth-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.auth-button.active {
+    -fx-background-color: #4CAF50;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 10, 0, 0, 0);
+}
+
+/* Form container styling */
+.login-grid {
+    -fx-padding: 20;
+    -fx-alignment: center;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+}
+
+/* Label styling */
+.form-label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-alignment: center-right;
+    -fx-padding: 0 5 0 0;
+    -fx-font-family: 'Geostar Fill';
+}
+
+/* Form field styling */
+.form-field {
+    -fx-min-width: 200;
+    -fx-max-width: 200;
+    -fx-pref-width: 200;
+    -fx-background-radius: 5;
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-padding: 8;
+    -fx-font-family: 'Geostar Fill';
+}
+
+.form-field:focused {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 3, 0, 0, 0);
+}
+
+/* Submit button styling */
+.submit-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-min-width: 200;
+    -fx-max-width: 200;
+    -fx-pref-width: 200;
+    -fx-padding: 10 20;
+    -fx-font-size: 14px;
+    -fx-background-radius: 5;
+    -fx-font-family: 'Geostar Fill';
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 3, 0, 0, 0);
+}
+
+.submit-button:hover {
+    -fx-background-color: #45a049;
+}
+
+/* Error label styling */
+.error-label {
+    -fx-text-fill: #ff6b6b;
+    -fx-font-size: 12px;
+    -fx-padding: 5 0 0 0;
+    -fx-font-family: 'Geostar Fill';
+}
+
+/* Slide container for animations */
+.slide-container {
+    -fx-alignment: center;
+}
+
+/* Form controls container */
+.form-controls {
+    -fx-alignment: center;
+    -fx-spacing: 10;
+}
