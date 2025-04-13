@@ -38,6 +38,9 @@ public class PokemonCardViewer extends Application {
         root.setPadding(new Insets(10));
         root.getChildren().addAll(sortOptions, listView);
 
+        // Make listView stretch when window resizes
+        VBox.setVgrow(listView, javafx.scene.layout.Priority.ALWAYS);
+
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setTitle("Pokemon Card Viewer");
         primaryStage.setScene(scene);
@@ -81,6 +84,13 @@ public class PokemonCardViewer extends Application {
         );
 
         hbox.getChildren().addAll(imageView, infoBox);
+
+        // Switch to card detail scene in same window
+        hbox.setOnMouseClicked(event -> {
+            CardDetailView detailView = new CardDetailView();
+            detailView.showCardDetail((Stage) hbox.getScene().getWindow(), card);
+        });
+
         return hbox;
     }
 
