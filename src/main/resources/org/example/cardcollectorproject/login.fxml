@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22"
+           fx:controller="org.example.cardcollectorproject.controllers.LogInController"
+           stylesheets="@styles/base.css, @styles/login.css">
+
+    <!-- Background Image -->
+    <ImageView fx:id="backgroundImage" fitWidth="1300" fitHeight="740" preserveRatio="true"> <!-- Slightly larger than container -->
+        <image>
+            <Image url="@images/login.jpg"/>
+        </image>
+    </ImageView>
+
+
+    <!-- Semi-transparent overlay -->
+    <Region style="-fx-background-color: rgba(0, 0, 0, 0.5);"/>
+
+    <!-- Main Content VBox -->
+    <VBox alignment="CENTER" spacing="20" styleClass="main-container" maxWidth="500">
+        <!-- Welcome Text -->
+        <Label text="Welcome Back" styleClass="welcome-text"/>
+
+        <!-- Button Group -->
+        <HBox fx:id="buttonGroup" alignment="CENTER" spacing="20" styleClass="button-group">
+            <Button text="Login" fx:id="loginButton" onAction="#switchToLogin"
+                    styleClass="auth-button, active"/>
+            <Button text="Sign Up" fx:id="signUpButton" onAction="#switchToSignUp"
+                    styleClass="auth-button"/>
+        </HBox>
+
+        <!-- Form Container -->
+        <StackPane styleClass="slide-container">
+            <GridPane fx:id="formGrid" styleClass="login-grid" vgap="10" hgap="10" alignment="CENTER">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+
+                <!-- Column Constraints -->
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES"
+                                       minWidth="120" prefWidth="120" maxWidth="120"/>
+                    <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES"
+                                       minWidth="200" prefWidth="200" maxWidth="200"/>
+                </columnConstraints>
+
+                <!-- Row Constraints -->
+                <rowConstraints>
+                    <RowConstraints minHeight="40" prefHeight="40" vgrow="NEVER"/>
+                    <RowConstraints minHeight="40" prefHeight="40" vgrow="NEVER"/>
+                    <RowConstraints minHeight="40" prefHeight="40" vgrow="NEVER"/>
+                    <RowConstraints minHeight="40" prefHeight="40" vgrow="NEVER"/>
+                    <RowConstraints minHeight="60" prefHeight="60" vgrow="NEVER"/>
+                </rowConstraints>
+
+                <!-- Login Fields -->
+                <Label text="Username:" styleClass="form-label"
+                       GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="usernameField" styleClass="form-field"
+                           GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                <Label text="Password:" styleClass="form-label"
+                       GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <PasswordField fx:id="passwordField" styleClass="form-field"
+                               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <!-- Sign Up Fields -->
+                <Label text="Confirm Password:" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                       fx:id="confirmPasswordLabel" styleClass="form-label" visible="false" wrapText="true"/>
+                <PasswordField fx:id="confirmPasswordField" GridPane.columnIndex="1"
+                               GridPane.rowIndex="2" styleClass="form-field" visible="false"
+                               maxWidth="200"/>
+
+                <Label fx:id="emailLabel" text="Email:" styleClass="form-label"
+                       GridPane.columnIndex="0" GridPane.rowIndex="3" visible="false" managed="false"/>
+                <TextField fx:id="emailField" styleClass="form-field"
+                           GridPane.columnIndex="1" GridPane.rowIndex="3" visible="false" managed="false"/>
+
+                <!-- Submit Button and Error Label -->
+                <VBox spacing="10" alignment="CENTER"
+                      GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                    <Button fx:id="submitButton" text="Login" onAction="#handleSubmit"
+                            styleClass="submit-button"/>
+                    <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
+                </VBox>
+            </GridPane>
+        </StackPane>
+    </VBox>
+</StackPane>
