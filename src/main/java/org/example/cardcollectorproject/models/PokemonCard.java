@@ -1,5 +1,8 @@
 package org.example.cardcollectorproject.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // POJO for storing card details
 public class PokemonCard {
     String name;
@@ -8,6 +11,8 @@ public class PokemonCard {
     String mechanic; // e.g., GX, EX, V, etc.
     String moves;
     String cardNumber;
+
+    private List<CardPrice> priceHistory = new ArrayList<>();
 
     public PokemonCard(String name, String imageUrl, String cardType, String mechanic, String moves, String cardNumber) {
         this.name = name;
@@ -64,5 +69,13 @@ public class PokemonCard {
 
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
+    }
+
+    public List<CardPrice> getPriceHistory() {
+        return priceHistory;
+    }
+
+    public void setPriceHistory(List<CardPrice> priceHistory) {
+        this.priceHistory = priceHistory;
     }
 }
