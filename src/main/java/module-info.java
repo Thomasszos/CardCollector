@@ -16,5 +16,6 @@ module org.example.cardcollectorproject {
     opens org.example.cardcollectorproject to javafx.fxml;
     exports org.example.cardcollectorproject;
     exports org.example.cardcollectorproject.controllers;
+    opens org.example.cardcollectorproject.controllers to javafx.fxml;
 
 }

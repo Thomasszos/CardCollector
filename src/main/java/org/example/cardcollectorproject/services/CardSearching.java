@@ -56,7 +56,6 @@ public class CardSearching {
         return cards;
     }
 
-    // ✅ Added method for use by TCGio & other JSON sources
     public List<PokemonCard> parseJsonToCards(String responseBody) {
         List<PokemonCard> cards = new ArrayList<>();
         Gson gson = new Gson();
@@ -71,7 +70,6 @@ public class CardSearching {
         return cards;
     }
 
-    // 🧠 Helper method to avoid duplicating parsing logic
     private PokemonCard parseSingleCard(JsonObject cardJson) {
         String name = cardJson.has("name") ? cardJson.get("name").getAsString() : "Unknown";
 

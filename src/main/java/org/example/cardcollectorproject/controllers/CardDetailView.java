@@ -26,8 +26,12 @@ public class CardDetailView {
 
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> {
-            PokemonCardViewer viewer = new PokemonCardViewer();
-            viewer.start(primaryStage);
+            try {
+                PokemonCardViewer viewer = new PokemonCardViewer();
+                viewer.start(primaryStage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
 
         VBox layout = new VBox(10, imageView, nameLabel, typeLabel, setLabel, priceLabel, numberLabel, backButton);
@@ -39,4 +43,3 @@ public class CardDetailView {
         primaryStage.setScene(detailScene);
     }
 }
-
