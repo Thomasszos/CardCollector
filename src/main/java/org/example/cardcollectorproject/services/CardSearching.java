@@ -27,10 +27,7 @@ public class CardSearching {
                 query += "types:" + typeQuery.trim();
             }
 
-            // If no query is given, return nothing (don't pull all cards)
-            if (query.isBlank()) {
-                return cards;
-            }
+            if (query.isBlank()) return cards;
 
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
             String apiUrl = "https://api.pokemontcg.io/v2/cards?q=" + encodedQuery;
@@ -46,29 +43,7 @@ public class CardSearching {
 
                 for (int i = 0; i < data.size(); i++) {
                     JsonObject cardJson = data.get(i).getAsJsonObject();
-
-                    String name = cardJson.has("name") ? cardJson.get("name").getAsString() : "Unknown";
-
-                    String imageUrl = "";
-                    if (cardJson.has("images")) {
-                        JsonObject images = cardJson.getAsJsonObject("images");
-                        imageUrl = images.has("large") ? images.get("large").getAsString() : "";
-                    }
-
-                    String cardType = cardJson.has("types") ? cardJson.get("types").getAsJsonArray().toString() : "";
-                    String mechanic = cardJson.has("subtypes") ? cardJson.get("subtypes").getAsJsonArray().toString() : "N/A";
-
-                    String moves = "";
-                    if (cardJson.has("attacks")) {
-                        JsonArray attacks = cardJson.getAsJsonArray("attacks");
-                        StringBuilder movesBuilder = new StringBuilder();
-                        attacks.forEach(attack -> movesBuilder.append(attack.getAsJsonObject().get("name").getAsString()).append(" "));
-                        moves = movesBuilder.toString().trim();
-                    }
-
-                    String cardNumber = cardJson.has("number") ? cardJson.get("number").getAsString() : "";
-
-                    cards.add(new PokemonCard(name, imageUrl, cardType, mechanic, moves, cardNumber));
+                    cards.add(parseSingleCard(cardJson));
                 }
             } else {
                 System.err.println("Failed to fetch cards: HTTP " + conn.getResponseCode());
@@ -80,5 +55,47 @@ public class CardSearching {
 
         return cards;
     }
+
+    // ✅ Added method for use by TCGio & other JSON sources
+    public List<PokemonCard> parseJsonToCards(String responseBody) {
+        List<PokemonCard> cards = new ArrayList<>();
+        Gson gson = new Gson();
+        JsonObject json = gson.fromJson(responseBody, JsonObject.class);
+        JsonArray data = json.getAsJsonArray("data");
+
+        for (int i = 0; i < data.size(); i++) {
+            JsonObject cardJson = data.get(i).getAsJsonObject();
+            cards.add(parseSingleCard(cardJson));
+        }
+
+        return cards;
+    }
+
+    // 🧠 Helper method to avoid duplicating parsing logic
+    private PokemonCard parseSingleCard(JsonObject cardJson) {
+        String name = cardJson.has("name") ? cardJson.get("name").getAsString() : "Unknown";
+
+        String imageUrl = "";
+        if (cardJson.has("images")) {
+            JsonObject images = cardJson.getAsJsonObject("images");
+            imageUrl = images.has("large") ? images.get("large").getAsString() : "";
+        }
+
+        String cardType = cardJson.has("types") ? cardJson.get("types").getAsJsonArray().toString() : "";
+        String mechanic = cardJson.has("subtypes") ? cardJson.get("subtypes").getAsJsonArray().toString() : "N/A";
+
+        String moves = "";
+        if (cardJson.has("attacks")) {
+            JsonArray attacks = cardJson.getAsJsonArray("attacks");
+            StringBuilder movesBuilder = new StringBuilder();
+            attacks.forEach(attack -> movesBuilder.append(attack.getAsJsonObject().get("name").getAsString()).append(" "));
+            moves = movesBuilder.toString().trim();
+        }
+
+        String cardNumber = cardJson.has("number") ? cardJson.get("number").getAsString() : "";
+
+        return new PokemonCard(name, imageUrl, cardType, mechanic, moves, cardNumber);
+    }
 }
+
 

@@ -11,7 +11,10 @@ module org.example.cardcollectorproject {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires com.google.gson;
+    requires java.net.http;
 
     opens org.example.cardcollectorproject to javafx.fxml;
     exports org.example.cardcollectorproject;
+    exports org.example.cardcollectorproject.controllers;
+
 }
