@@ -66,4 +66,3 @@ public class PokemonCard {
         this.cardNumber = cardNumber;
     }
 }
-

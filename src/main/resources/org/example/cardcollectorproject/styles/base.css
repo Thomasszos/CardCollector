@@ -1,0 +1,16 @@
+/* base.css */
+@import url('https://fonts.googleapis.com/css2?family=Geostar+Fill&display=swap');
+
+.button {
+    -fx-background-radius: 5;
+    -fx-padding: 8 15;
+    -fx-min-width: 100;
+    -fx-cursor: hand;
+    -fx-font-family: 'Geostar Fill';
+}
+
+.text-field, .password-field {
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-padding: 5;
+    -fx-font-family: 'Geostar Fill';
+}

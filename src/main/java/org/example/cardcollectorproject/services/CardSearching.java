@@ -10,6 +10,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import org.example.cardcollectorproject.models.PokemonCard;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,6 +97,7 @@ public class CardSearching {
         return new PokemonCard(name, imageUrl, cardType, mechanic, moves, cardNumber);
     }
 }
+
 
 
 
