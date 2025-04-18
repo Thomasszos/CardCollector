@@ -9,6 +9,8 @@ module org.example.cardcollectorproject {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires com.google.gson;
+    requires java.net.http;
 
     // Combined requirements
     requires java.desktop;
@@ -22,3 +24,4 @@ module org.example.cardcollectorproject {
     exports org.example.cardcollectorproject;
     exports org.example.cardcollectorproject.controllers;
 }
+
