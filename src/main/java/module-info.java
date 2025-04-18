@@ -14,8 +14,6 @@ module org.example.cardcollectorproject {
 
     // Combined requirements
     requires java.desktop;
-    requires java.net.http;
-    requires com.google.gson;
     requires java.smartcardio;
 
     // Combined opens/exports
