@@ -20,3 +20,4 @@ public class PokemonCardViewer extends Application {
         launch(args);
     }
 }
+

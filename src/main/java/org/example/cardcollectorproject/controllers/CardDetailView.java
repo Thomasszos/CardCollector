@@ -43,3 +43,5 @@ public class CardDetailView {
         primaryStage.setScene(detailScene);
     }
 }
+
+
