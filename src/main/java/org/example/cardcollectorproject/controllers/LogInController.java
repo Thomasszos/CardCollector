@@ -3,10 +3,13 @@ package org.example.cardcollectorproject.controllers;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.cardcollectorproject.exceptions.AuthenticationException;
 import org.example.cardcollectorproject.exceptions.ValidationException;
@@ -15,6 +18,8 @@ import org.example.cardcollectorproject.services.UIAnimationService;
 import org.example.cardcollectorproject.services.ValidationService;
 
 import javafx.scene.image.ImageView;
+
+import java.io.IOException;
 
 
 public class LogInController {
@@ -105,15 +110,13 @@ public class LogInController {
         signUpButton.getStyleClass().add("auth-button");
         submitButton.getStyleClass().add("submit-button");
     }
-
     @FXML
     public void handleSubmit() {
-        clearError();
-
         if (isLoginMode) {
-            handleLogin();
+            // For now, just navigate to main view without authentication
+            navigateToMainView();
         } else {
-            handleSignUp();
+            // Handle sign up logic when implemented
         }
     }
 
@@ -197,6 +200,22 @@ public class LogInController {
                 });
                 fadeOut.play();
             }
+        }
+    }
+    @FXML
+    private void navigateToMainView() {
+        try {
+            // Get the current stage
+            Stage currentStage = (Stage) loginButton.getScene().getWindow();
+
+            // Load main view
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/cardcollectorproject/main-view.fxml"));
+            Scene mainScene = new Scene(loader.load(), 1150, 680);
+
+            // Set the scene
+            currentStage.setScene(mainScene);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
