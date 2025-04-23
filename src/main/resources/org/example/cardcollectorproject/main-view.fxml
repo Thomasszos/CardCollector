@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22"
+      fx:controller="org.example.cardcollectorproject.controllers.MainViewController">
+
+    <TabPane fx:id="tabPane" VBox.vgrow="ALWAYS"
+             tabClosingPolicy="UNAVAILABLE">
+
+    <tabs>
+            <Tab text="Home">
+                <content>
+                    <fx:include source="home.fxml"/>
+                </content>
+            </Tab>
+            <Tab text="Search">
+                <content>
+                    <fx:include source="search.fxml"/>
+                </content>
+            </Tab>
+            <Tab text="Collection">
+                <content>
+                    <fx:include source="collection.fxml"/>
+                </content>
+            </Tab>
+            <Tab text="Watchlist">
+                <content>
+                    <fx:include source="watchlist.fxml"/>
+                </content>
+            </Tab>
+            <Tab text="Log Out">
+                <content>
+                    <AnchorPane/>
+                </content>
+            </Tab>
+        </tabs>
+    </TabPane>
+</VBox>
