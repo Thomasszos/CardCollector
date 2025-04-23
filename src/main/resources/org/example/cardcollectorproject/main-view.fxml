@@ -4,13 +4,14 @@
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22"
-      fx:controller="org.example.cardcollectorproject.controllers.MainViewController">
+      fx:controller="org.example.cardcollectorproject.controllers.MainViewController"
+      stylesheets="@styles/base.css, @styles/main-view.css">
 
     <TabPane fx:id="tabPane" VBox.vgrow="ALWAYS"
              tabClosingPolicy="UNAVAILABLE">
 
     <tabs>
-            <Tab text="Home">
+            <Tab text="Home" styleClass="nav-tab">
                 <content>
                     <fx:include source="home.fxml"/>
                 </content>
