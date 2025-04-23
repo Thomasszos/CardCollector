@@ -1,0 +1,20 @@
+.nav-tab-pane {
+    -fx-tab-min-width: 100px;
+}
+
+.nav-tab-pane .tab-header-area {
+    -fx-padding: 5 5 0 5;
+}
+
+.nav-tab {
+    -fx-background-color: #2c3e50;
+    -fx-text-fill: white;
+}
+
+.nav-tab:selected {
+    -fx-background-color: #34495e;
+}
+
+.logout-tab {
+    -fx-tab-min-width: 80px;
+}
