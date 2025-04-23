@@ -26,8 +26,8 @@ public class UserSession {
     public void clearSession() {
         this.currentUser = null;
     }
-
-    public boolean isLoggedIn() {
-        return currentUser != null;
-    }
+//
+//    public boolean isLoggedIn() {
+//        return currentUser != null;
+//    }
 }

@@ -48,25 +48,25 @@ public class CosmosDbService {
         }
     }
 
-    /**
-     * Retrieves a user by their userId. The userId is the partition key in this implementation.
-     *
-     * @param userId The ID of the user (partition key).
-     * @return The User object if found, or null if not found.
-     */
-    public User getUser(String userId) {
-        try {
-            // Use the partition key `/userId` to retrieve the document
-            return usersContainer.readItem(userId, new PartitionKey(userId), User.class).getItem();
-        } catch (CosmosException e) {
-            if (e.getStatusCode() == 404) {
-                System.err.println("User not found with userId: " + userId);
-            } else {
-                System.err.println("Error fetching user: " + e.getMessage());
-            }
-        }
-        return null; // Return null if the user is not found
-    }
+//    /**
+//     * Retrieves a user by their userId. The userId is the partition key in this implementation.
+//     *
+//     * @param userId The ID of the user (partition key).
+//     * @return The User object if found, or null if not found.
+//     */
+//    public User getUser(String userId) {
+//        try {
+//            // Use the partition key `/userId` to retrieve the document
+//            return usersContainer.readItem(userId, new PartitionKey(userId), User.class).getItem();
+//        } catch (CosmosException e) {
+//            if (e.getStatusCode() == 404) {
+//                System.err.println("User not found with userId: " + userId);
+//            } else {
+//                System.err.println("Error fetching user: " + e.getMessage());
+//            }
+//        }
+//        return null; // Return null if the user is not found
+//    }
     public User getUserByUsername(String username) {
         String query = "SELECT * FROM c WHERE c.username = @username";
         CosmosQueryRequestOptions options = new CosmosQueryRequestOptions();
