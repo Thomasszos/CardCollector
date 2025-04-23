@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 public class PokemonCardViewer extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/PokemonCardViewer.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/cardcollectorproject/PokemonCardViewer.fxml"));
         Parent root = loader.load();
         primaryStage.setTitle("Pokemon Card Viewer");
         primaryStage.setScene(new Scene(root, 800, 600));
