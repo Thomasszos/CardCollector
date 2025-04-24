@@ -113,10 +113,9 @@ public class LogInController {
     @FXML
     public void handleSubmit() {
         if (isLoginMode) {
-            // For now, just navigate to main view without authentication
-            navigateToMainView();
+            handleLogin();
         } else {
-            // Handle sign up logic when implemented
+            handleSignUp();
         }
     }
 
@@ -126,9 +125,10 @@ public class LogInController {
 
         try {
             authService.login(username, password);
-            // TODO: Navigate to main application screen after successful login
+            clearError();
+            navigateToMainView(); // Navigate to the next view
         } catch (AuthenticationException e) {
-            showError(e.getMessage());
+            showError(e.getMessage()); // Display error message on the UI
         }
     }
 
@@ -141,12 +141,14 @@ public class LogInController {
         try {
             validationService.validateSignUpData(username, password, confirmPassword, email);
             authService.signUp(username, password, email);
-            showSuccess("Account created successfully! Please log in.");
-            switchToLogin();
+            clearError();
+            showSuccess("Sign-Up Successful!"); // Display success message
+            switchToLogin(); // Go back to login mode
         } catch (ValidationException | AuthenticationException e) {
-            showError(e.getMessage());
+            showError(e.getMessage()); // Display validation/authentication error
         }
     }
+
     @FXML
     public void switchToLogin() {
         if (!isLoginMode) {
@@ -240,7 +242,7 @@ public class LogInController {
         errorLabel.setVisible(false);
         errorLabel.getStyleClass().removeAll("error-message", "success-message");
     }
-// for future implementations
+    // for future implementations
     private void clearFields() {
         usernameField.clear();
         passwordField.clear();
