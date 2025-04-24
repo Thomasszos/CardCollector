@@ -23,6 +23,7 @@ module org.example.cardcollectorproject {
     requires java.smartcardio;
     requires spring.data.commons;
 
+
     // Combined opens/exports
     opens org.example.cardcollectorproject to javafx.fxml, com.google.gson;
     opens org.example.cardcollectorproject.controllers to javafx.fxml, com.google.gson;

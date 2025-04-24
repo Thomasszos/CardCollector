@@ -34,6 +34,7 @@ public class AuthenticationService {
 
         // Set the current user in the session
         userSession.setCurrentUser(user);
+
     }
 
     public void signUp(String username, String password, String email) throws AuthenticationException {
@@ -46,6 +47,7 @@ public class AuthenticationService {
         if (email == null || email.trim().isEmpty()) {
             throw new AuthenticationException("Email cannot be empty");
         }
+
 
         // Check if user already exists by username
         if (dbService.getUserByUsername(username) != null) {
@@ -84,4 +86,5 @@ public class AuthenticationService {
 //            System.err.println("Login Failed: " + e.getMessage());
 //        }
 //    }
+
 }
