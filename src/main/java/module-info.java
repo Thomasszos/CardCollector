@@ -1,4 +1,10 @@
 module org.example.cardcollectorproject {
+
+    requires com.fasterxml.jackson.databind;
+    requires com.azure.cosmos;
+
+    exports org.example.cardcollectorproject.models to com.fasterxml.jackson.databind;
+
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -9,12 +15,14 @@ module org.example.cardcollectorproject {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires com.google.gson;
+    requires java.net.http;
 
     // Combined requirements
     requires java.desktop;
-    requires java.net.http;
-    requires com.google.gson;
     requires java.smartcardio;
+    requires spring.data.commons;
+
 
     // Combined opens/exports
     opens org.example.cardcollectorproject to javafx.fxml, com.google.gson;
@@ -22,3 +30,4 @@ module org.example.cardcollectorproject {
     exports org.example.cardcollectorproject;
     exports org.example.cardcollectorproject.controllers;
 }
+

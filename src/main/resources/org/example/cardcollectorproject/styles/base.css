@@ -1,6 +1,6 @@
 /* base.css */
 @import url('https://fonts.googleapis.com/css2?family=Geostar+Fill&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Tektur&display=swap');
 .button {
     -fx-background-radius: 5;
     -fx-padding: 8 15;

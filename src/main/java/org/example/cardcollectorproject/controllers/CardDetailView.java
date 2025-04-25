@@ -14,31 +14,34 @@ public class CardDetailView {
 
     public void showCardDetail(Stage primaryStage, PokemonCard card) {
         ImageView imageView = new ImageView();
-        if (!card.getImageUrl().isEmpty()) {
+        if (card.getImageUrl() != null && !card.getImageUrl().isEmpty()) {
             imageView.setImage(new Image(card.getImageUrl(), 250, 0, true, true));
         }
 
-        Label nameLabel = new Label("Name: " + card.getName());
+        Label nameLabel = new Label("Name: " + (card.getName() != null ? card.getName() : "N/A"));
         Label typeLabel = new Label("Type: " + card.getCardType());
-        Label setLabel = new Label("Set: (placeholder)");
-        Label priceLabel = new Label("Market Price: (placeholder)");
         Label numberLabel = new Label("Card Number: " + card.getCardNumber());
+        Label setLabel = new Label("Set: N/A");
+        Label priceLabel = new Label("Market Price: N/A");
 
-        // Back button to return to previous view
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> {
-            // Re-launch the main viewer scene
-            PokemonCardViewer viewer = new PokemonCardViewer();
-            viewer.start(primaryStage);
+            try {
+                PokemonCardViewer viewer = new PokemonCardViewer();
+                viewer.start(primaryStage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
 
         VBox layout = new VBox(10, imageView, nameLabel, typeLabel, setLabel, priceLabel, numberLabel, backButton);
         layout.setPadding(new Insets(15));
-
-        // Optional: let layout expand if needed
         layout.setFillWidth(true);
 
         Scene detailScene = new Scene(layout, 600, 500);
+        primaryStage.setTitle("Card Details - " + card.getName());
         primaryStage.setScene(detailScene);
     }
 }
+
+
