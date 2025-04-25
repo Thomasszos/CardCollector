@@ -65,4 +65,9 @@ public class PokemonCard {
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
+    @Override
+    public String toString() {
+        return name + " - " + cardType.replace("[", "").replace("]", "");
+    }
+
 }
