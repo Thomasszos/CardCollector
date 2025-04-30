@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.KeyCode;
@@ -56,6 +57,34 @@ public class PokemonCardViewerController implements Initializable {
         closeButton.setOnAction(e -> hideCardDetail());
 
         listView.setOnMouseClicked(this::handleCardClick);
+
+        listView.setCellFactory(lv -> new ListCell<>() {
+            private final ImageView imageView = new ImageView();
+            private final Label nameLabel = new Label();
+            private final HBox hBox = new HBox(10, imageView, nameLabel);
+
+            {
+                imageView.setFitWidth(50);  // You can adjust dimensions
+                imageView.setPreserveRatio(true);
+            }
+
+            @Override
+            protected void updateItem(PokemonCard card, boolean empty) {
+                super.updateItem(card, empty);
+
+                if (empty || card == null) {
+                    setGraphic(null);
+                } else {
+                    nameLabel.setText(card.getName());
+                    if (card.getImageUrl() != null && !card.getImageUrl().isEmpty()) {
+                        imageView.setImage(new Image(card.getImageUrl(), 50, 50, true, true));
+                    } else {
+                        imageView.setImage(null);
+                    }
+                    setGraphic(hBox);
+                }
+            }
+        });
     }
 
     private void searchCards() {
