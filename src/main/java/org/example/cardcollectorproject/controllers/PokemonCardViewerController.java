@@ -1,93 +1,169 @@
 package org.example.cardcollectorproject.controllers;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import org.example.cardcollectorproject.models.PokemonCard;
 import org.example.cardcollectorproject.services.CardSearching;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class PokemonCardViewerController {
+public class PokemonCardViewerController implements Initializable {
 
-    @FXML private TextField nameField;
-    @FXML private TextField typeField;
+    @FXML private ComboBox<String> searchCriteriaBox;
+    @FXML private TextField searchField;
     @FXML private Button searchButton;
     @FXML private ComboBox<String> sortOptions;
-    @FXML private ListView<HBox> listView;
+    @FXML private ListView<PokemonCard> listView;
+
+    @FXML private VBox cardDetailBox;
+    @FXML private ImageView cardImageView;
+    @FXML private Label nameLabel;
+    @FXML private Label typeLabel;
+    @FXML private Label mechanicLabel;
+    @FXML private Label movesLabel;
+    @FXML private Label cardNumberLabel;
+    @FXML private Button closeButton;
 
     private final List<PokemonCard> cards = new ArrayList<>();
     private final CardSearching cardService = new CardSearching();
+    private final ContextMenu autoCompletePopup = new ContextMenu();
 
-    @FXML
-    public void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        searchCriteriaBox.getItems().addAll("Name", "Type", "ID", "Set");
+        searchCriteriaBox.setValue("Name");
+
         sortOptions.getItems().addAll("Name", "Type");
         sortOptions.setValue("Name");
 
-        searchButton.setOnAction(e -> performSearch());
-        sortOptions.setOnAction(e -> sortAndDisplayCards(sortOptions.getValue()));
+        searchButton.setOnAction(e -> searchCards());
+        searchField.setOnAction(e -> searchCards());
+        searchField.textProperty().addListener((obs, oldText, newText) -> showAutoCompleteSuggestions(newText));
+
+        sortOptions.setOnAction(e -> sortAndDisplayCards());
+        closeButton.setOnAction(e -> hideCardDetail());
+
+        listView.setOnMouseClicked(this::handleCardClick);
     }
 
-    private void performSearch() {
-        String name = nameField.getText().trim();
-        String type = typeField.getText().trim();
+    private void searchCards() {
+        String criteria = searchCriteriaBox.getValue();
+        String searchText = searchField.getText().trim();
 
-        System.out.println("Searching for: name=" + name + ", type=" + type); // Debug
+        String name = "";
+        String type = "";
+        String id = "";
+        String set = "";
+
+        if ("Name".equals(criteria)) {
+            name = searchText;
+        } else if ("Type".equals(criteria)) {
+            type = searchText;
+        } else if ("ID".equals(criteria)) {
+            id = searchText;
+        } else if ("Set".equals(criteria)) {
+            set = searchText;
+        }
 
         cards.clear();
-        cards.addAll(cardService.fetchCards(name, type));
-        System.out.println("Found cards: " + cards.size()); // Debug
-
-        sortAndDisplayCards(sortOptions.getValue());
+        cards.addAll(cardService.fetchCards(name, type, set, id));
+        sortAndDisplayCards();
     }
 
-    private void sortAndDisplayCards(String criterion) {
-        if ("Name".equals(criterion)) {
+    private void sortAndDisplayCards() {
+        if ("Name".equals(sortOptions.getValue())) {
             cards.sort(Comparator.comparing(PokemonCard::getName));
-        } else if ("Type".equals(criterion)) {
+        } else if ("Type".equals(sortOptions.getValue())) {
             cards.sort(Comparator.comparing(PokemonCard::getCardType));
         }
 
-        listView.getItems().clear();
-        for (PokemonCard card : cards) {
-            listView.getItems().add(createCardHBox(card));
+        listView.getItems().setAll(cards);
+    }
+
+    private void handleCardClick(MouseEvent event) {
+        PokemonCard selectedCard = listView.getSelectionModel().getSelectedItem();
+        if (selectedCard != null) {
+            showCardDetail(selectedCard);
         }
     }
 
-    private HBox createCardHBox(PokemonCard card) {
-        HBox hbox = new HBox(10);
-        hbox.setStyle("-fx-padding: 5;");
-
-        ImageView imageView = new ImageView();
-        if (!card.getImageUrl().isEmpty()) {
-            imageView.setImage(new Image(card.getImageUrl(), 150, 0, true, true));
+    private void showCardDetail(PokemonCard card) {
+        if (card.getImageUrl() != null && !card.getImageUrl().isEmpty()) {
+            cardImageView.setImage(new Image(card.getImageUrl(), 200, 0, true, true));
+        } else {
+            cardImageView.setImage(null);
         }
 
-        VBox infoBox = new VBox(5);
-        infoBox.getChildren().addAll(
-                new Label("Name: " + card.getName()),
-                new Label("Type: " + card.getCardType()),
-                new Label("Mechanic: " + card.getMechanic()),
-                new Label("Moves: " + card.getMoves()),
-                new Label("Card Number: " + card.getCardNumber())
-        );
+        nameLabel.setText("Name: " + card.getName());
+        typeLabel.setText("Type: " + card.getCardType());
+        mechanicLabel.setText("Mechanic: " + card.getMechanic());
+        movesLabel.setText("Moves: " + card.getMoves());
+        cardNumberLabel.setText("Card #: " + card.getCardNumber());
 
-        hbox.getChildren().addAll(imageView, infoBox);
+        cardDetailBox.setVisible(true);
+        cardDetailBox.setManaged(true);
+    }
 
-        hbox.setOnMouseClicked(e -> {
-            CardDetailView detailView = new CardDetailView();
-            detailView.showCardDetail((Stage) listView.getScene().getWindow(), card);
-        });
+    private void hideCardDetail() {
+        cardDetailBox.setVisible(false);
+        cardDetailBox.setManaged(false);
+    }
 
-        return hbox;
+    private void showAutoCompleteSuggestions(String query) {
+        if (query.isBlank()) {
+            autoCompletePopup.hide();
+            return;
+        }
+
+        String criteria = searchCriteriaBox.getValue();
+        List<String> suggestions = new ArrayList<>();
+
+        for (PokemonCard card : cards) {
+            String target = switch (criteria) {
+                case "Name" -> card.getName();
+                case "Type" -> card.getCardType();
+                case "ID" -> card.getCardNumber();
+                case "Set" -> "";
+                default -> "";
+            };
+
+            if (target != null && target.toLowerCase().contains(query.toLowerCase()) && !suggestions.contains(target)) {
+                suggestions.add(target);
+            }
+        }
+
+        if (suggestions.isEmpty()) {
+            autoCompletePopup.hide();
+            return;
+        }
+
+        List<MenuItem> menuItems = new ArrayList<>();
+        for (String suggestion : suggestions.subList(0, Math.min(suggestions.size(), 5))) {
+            MenuItem item = new MenuItem(suggestion);
+            item.setOnAction(e -> {
+                searchField.setText(suggestion);
+                searchCards();
+            });
+            menuItems.add(item);
+        }
+
+        autoCompletePopup.getItems().setAll(menuItems);
+        autoCompletePopup.show(searchField, javafx.geometry.Side.BOTTOM, 0, 0);
     }
 }
+
 
 
 

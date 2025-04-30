@@ -1,25 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox xmlns="http://javafx.com/javafx/8"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.cardcollectorproject.controllers.PokemonCardViewerController"
-      spacing="10">
+<BorderPane xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.cardcollectorproject.controllers.PokemonCardViewerController">
 
-    <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
-    </padding>
+    <top>
+        <HBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <ComboBox fx:id="searchCriteriaBox" prefWidth="150"/>
+            <TextField fx:id="searchField" promptText="Enter search..."/>
+            <Button fx:id="searchButton" text="Search"/>
+            <ComboBox fx:id="sortOptions" prefWidth="150"/>
+        </HBox>
+    </top>
 
-    <TextField fx:id="nameField" promptText="Enter Pokémon name"/>
-    <TextField fx:id="typeField" promptText="Enter Pokémon type (e.g. Fire, Electric)"/>
-    <Button fx:id="searchButton" text="Search"/>
-    <ComboBox fx:id="sortOptions"/>
-    <ListView fx:id="listView"/>
+    <left>
+        <ListView fx:id="listView" prefWidth="300"/>
+    </left>
 
-</VBox>
+    <center>
+        <VBox fx:id="cardDetailBox" spacing="10" visible="false" managed="false">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Button text="Close" fx:id="closeButton"/>
+            <ImageView fx:id="cardImageView" fitWidth="200"/>
+            <Label fx:id="nameLabel"/>
+            <Label fx:id="typeLabel"/>
+            <Label fx:id="mechanicLabel"/>
+            <Label fx:id="movesLabel"/>
+            <Label fx:id="cardNumberLabel"/>
+        </VBox>
+    </center>
+
+</BorderPane>
+        e>
+
 
 
 

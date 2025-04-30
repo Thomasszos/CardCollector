@@ -162,6 +162,12 @@
             <version>3.2.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-cosmos</artifactId>
+            <version>4.48.0</version>
+        </dependency>
+
 
 
 
