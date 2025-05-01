@@ -22,6 +22,9 @@ module org.example.cardcollectorproject {
     requires java.desktop;
     requires java.smartcardio;
     requires spring.data.commons;
+    requires java.sql;
+    requires json.smart;
+    requires org.json;
 
 
     // Combined opens/exports
