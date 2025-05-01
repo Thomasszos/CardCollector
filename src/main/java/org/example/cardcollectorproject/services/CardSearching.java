@@ -17,7 +17,7 @@ import java.util.List;
 
 public class CardSearching {
 
-    public List<PokemonCard> fetchCards(String nameQuery, String typeQuery) {
+    public List<PokemonCard> fetchCards(String nameQuery, String typeQuery, String setQuery, String idQuery) {
         List<PokemonCard> cards = new ArrayList<>();
         try {
             String query = "";
