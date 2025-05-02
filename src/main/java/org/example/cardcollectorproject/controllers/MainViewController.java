@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
@@ -83,7 +84,8 @@ public class MainViewController implements Initializable {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/cardcollectorproject/pokemoncardviewer.fxml"));
             //AnchorPane newContent = loader.load();
-            VBox cardView = (VBox) loader.load();
+            BorderPane cardView = (BorderPane) loader.load();
+//            VBox cardView = (VBox) loader.load();
 
             // Replace the content of the current tab (or a specific tab)
             tabPane.getTabs().get(1).setContent(cardView); // e.g., "Search" tab
