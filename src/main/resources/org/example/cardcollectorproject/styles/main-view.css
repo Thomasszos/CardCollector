@@ -1,20 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Germania+One&family=Tektur&display=swap');
+
+/* Header Styling */
+.header-bar {
+    -fx-background-color: #1a2035;
+    -fx-padding: 8 15;
+    -fx-alignment: center;
+    -fx-spacing: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 5, 0, 0, 0);
+    -fx-border-width: 0 0 2 0;
+    -fx-border-color: #ffa500;
+}
+
+.logo-text {
+    -fx-font-family: 'Germania One';
+    -fx-font-size: 22px;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(255,165,0,0.5), 2, 0.5, 0, 0);
+}
+
+.user-display {
+    -fx-font-size: 14px;
+    -fx-text-fill: #ffd700;
+    -fx-padding: 5 15;
+    -fx-background-radius: 15;
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 5;
+    -fx-background-radius: 50%;
+    -fx-cursor: hand;
+}
+
+.icon-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Tab Pane Styling */
 .nav-tab-pane {
-    -fx-tab-min-width: 100px;
+    -fx-background-color: transparent;
 }
 
 .nav-tab-pane .tab-header-area {
-    -fx-padding: 5 5 0 5;
+    -fx-background-color: #1a2035;
+    -fx-padding: 0;
+    -fx-border-width: 0 0 2 0;
+    -fx-border-color: #ffa500;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 5, 0.5, 0, 2);
 }
 
-.nav-tab {
-    -fx-background-color: #2c3e50;
+.nav-tab-pane .tab-header-area .headers-region {
+    -fx-spacing: 0;
+}
+
+/* Adjust each tab width to fit properly */
+.nav-tab-pane .tab-header-area .headers-region .tab {
+    -fx-background-color: #1a2035;
+    -fx-pref-width: 230; /* Reduced from 230 to ensure they all fit */
+    -fx-pref-height: 60;
+    -fx-alignment: center;
+    -fx-border-width: 0 1px 0 0;
+    -fx-border-color: rgba(255, 165, 0, 0.3);
+}
+
+
+.nav-tab-pane .tab-header-area .headers-region .tab .tab-label {
+    -fx-text-fill: white;
+    -fx-font-family: 'Germania One';
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.tab-icon {
+    -fx-font-size: 16px;
     -fx-text-fill: white;
 }
 
-.nav-tab:selected {
-    -fx-background-color: #34495e;
+.nav-tab-pane .tab-header-area .headers-region .tab:hover {
+    -fx-background-color: #2a3045;
 }
 
-.logout-tab {
-    -fx-tab-min-width: 80px;
+.nav-tab-pane .tab-header-area .headers-region .tab:selected {
+    -fx-background-color: #ff8c00;
 }
+
+.nav-tab-pane .tab:selected:hover {
+    -fx-background-color: #e67e22;
+}
+
+.nav-tab-pane .tab-content-area {
+    -fx-background-color: rgba(0, 0, 0, 0.8); /* Changed to semi-transparent black */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 0);
+}
+
+/* Logout tab styling */
+.nav-tab-pane .tab-header-area .headers-region .logout-tab {
+    -fx-background-color: rgba(220, 53, 69, 0.2);
+}
+
+.nav-tab-pane .tab-header-area .headers-region .logout-tab:hover {
+    -fx-background-color: rgba(220, 53, 69, 0.3);
+}
+
+.nav-tab-pane .tab-header-area .headers-region .logout-tab:selected {
+    -fx-background-color: rgba(220, 53, 69, 0.5);
+}
+
+
+
+
+
+/* Add this to disable tab scrolling and adjust the tab header area */
+.nav-tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color: #1a2035;
+}
+
+/* This will prevent tab scrolling */
+.nav-tab-pane > .tab-header-area > .headers-region {
+    -fx-effect: null;
+}
+
+/* Remove control buttons (scroll arrows) */
+.nav-tab-pane > .tab-header-area > .control-buttons-tab {
+    -fx-visibility: hidden;
+    -fx-max-width: 0;
+    -fx-pref-width: 0;
+    -fx-min-width: 0;
+    -fx-padding: 0;
+}
+
