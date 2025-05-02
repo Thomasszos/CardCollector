@@ -37,6 +37,9 @@
             <Label fx:id="mechanicLabel"/>
             <Label fx:id="movesLabel"/>
             <Label fx:id="cardNumberLabel"/>
+
+            <!-- New: Description Label -->
+            <Label fx:id="descriptionLabel" wrapText="true" maxWidth="300"/>
         </VBox>
     </center>
 
