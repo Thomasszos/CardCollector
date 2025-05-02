@@ -1,5 +1,8 @@
 package org.example.cardcollectorproject.controllers;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -8,9 +11,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.KeyCode;
+import javafx.util.Duration;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import org.example.cardcollectorproject.api.PokeAPI;
 import org.example.cardcollectorproject.models.PokemonCard;
 import org.example.cardcollectorproject.services.CardSearching;
 
@@ -35,6 +39,7 @@ public class PokemonCardViewerController implements Initializable {
     @FXML private Label mechanicLabel;
     @FXML private Label movesLabel;
     @FXML private Label cardNumberLabel;
+    @FXML private Label descriptionLabel;
     @FXML private Button closeButton;
 
     private final List<PokemonCard> cards = new ArrayList<>();
@@ -64,7 +69,7 @@ public class PokemonCardViewerController implements Initializable {
             private final HBox hBox = new HBox(10, imageView, nameLabel);
 
             {
-                imageView.setFitWidth(50);  // You can adjust dimensions
+                imageView.setFitWidth(50);
                 imageView.setPreserveRatio(true);
             }
 
@@ -141,8 +146,31 @@ public class PokemonCardViewerController implements Initializable {
         movesLabel.setText("Moves: " + card.getMoves());
         cardNumberLabel.setText("Card #: " + card.getCardNumber());
 
+        descriptionLabel.setText("Loading description...");
+        new Thread(() -> {
+            String description = PokeAPI.getPokemonDescription(card.getName());
+            Platform.runLater(() -> {
+                descriptionLabel.setText("");
+                animateDescription(description);
+            });
+        }).start();
+
         cardDetailBox.setVisible(true);
         cardDetailBox.setManaged(true);
+    }
+
+    private void animateDescription(String text) {
+        final int[] index = {0};
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.millis(30), e -> {
+                    if (index[0] < text.length()) {
+                        descriptionLabel.setText(descriptionLabel.getText() + text.charAt(index[0]));
+                        index[0]++;
+                    }
+                })
+        );
+        timeline.setCycleCount(text.length());
+        timeline.play();
     }
 
     private void hideCardDetail() {
@@ -192,6 +220,8 @@ public class PokemonCardViewerController implements Initializable {
         autoCompletePopup.show(searchField, javafx.geometry.Side.BOTTOM, 0, 0);
     }
 }
+
+
 
 
 
