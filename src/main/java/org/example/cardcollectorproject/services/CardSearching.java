@@ -10,28 +10,33 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import org.example.cardcollectorproject.models.PokemonCard;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class CardSearching {
 
-    public List<PokemonCard> fetchCards(String nameQuery, String typeQuery) {
+    public List<PokemonCard> fetchCards(String nameQuery, String typeQuery, String setQuery, String idQuery) {
         List<PokemonCard> cards = new ArrayList<>();
         try {
-            String query = "";
+            StringBuilder query = new StringBuilder("supertype:pokemon");
+
             if (nameQuery != null && !nameQuery.isBlank()) {
-                query += "name:" + nameQuery.trim();
+                query.append(" name:").append(nameQuery.trim());
             }
             if (typeQuery != null && !typeQuery.isBlank()) {
-                if (!query.isEmpty()) query += " ";
-                query += "types:" + typeQuery.trim();
+                query.append(" types:").append(typeQuery.trim());
+            }
+            if (idQuery != null && !idQuery.isBlank()) {
+                query.append(" number:").append(idQuery.trim());
+            }
+            if (setQuery != null && !setQuery.isBlank()) {
+                query.append(" set.id:").append(setQuery.trim());
             }
 
-            if (query.isBlank()) return cards;
+            // Exclude special/promotional cards
+            query.append(" -set.name:\"Detective Pikachu\" -set.name:\"Celebrations\" -set.name:\"Pokémon GO\" -name:\"Ash*\" -name:\"Detective*\"");
 
-            String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
+            String encodedQuery = URLEncoder.encode(query.toString(), StandardCharsets.UTF_8);
             String apiUrl = "https://api.pokemontcg.io/v2/cards?q=" + encodedQuery;
 
             HttpURLConnection conn = (HttpURLConnection) new URL(apiUrl).openConnection();
@@ -97,6 +102,8 @@ public class CardSearching {
         return new PokemonCard(name, imageUrl, cardType, mechanic, moves, cardNumber);
     }
 }
+
+
 
 
 
