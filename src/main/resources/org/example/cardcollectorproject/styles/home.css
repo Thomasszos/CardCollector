@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Geostar+Fill&display=swap');
+
+/* Image styling */
+.character-image {
+    -fx-fit-width: 40%;
+    -fx-fit-height: 700;
+    -fx-viewport-min-height: 100%;
+    -fx-preserve-ratio: true;
+}
+
+.homeImage {
+    -fx-fit-width: 40%;
+    -fx-fit-height: 700;
+    -fx-viewport-min-height: 100%;
+    -fx-preserve-ratio: true;
+}
+
+/* Overlay for background image */
+.overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.4); /* Slightly more transparent to see images better */
+}
+
+/* Content container */
+.content-container {
+    -fx-padding: 40;
+    -fx-spacing: 30;
+    -fx-alignment: center;
+}
+
+/* New container with transparent white background */
+.inner-container {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 20;
+    -fx-padding: 30;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0);
+    -fx-max-width: 900;
+    -fx-alignment: center;
+}
+
+/* Main title */
+.home-title {
+    -fx-font-family: 'Geostar Fill';
+    -fx-text-fill: white;
+    -fx-font-size: 54px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(
+            gaussian,
+            rgba(0,0,0,0.75),
+            10,   /* radius */
+            0.5, /* spread */
+            0,0  /* offset x/y */
+    );
+}
+
+/* Features header */
+.features-header {
+    -fx-font-family: 'Geostar Fill';
+    -fx-text-fill: white;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 5, 0, 0, 0);
+}
+
+/* Description text */
+.home-description {
+    -fx-text-fill: #e0e0e0;
+    -fx-font-size: 18px;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+    -fx-max-width: 600;  /* wider for centered text */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 2, 0, 0, 0);
+    -fx-font-family: 'Tektur';
+}
+
+/* Feature Cards */
+.feature-card {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0, 0, 0);
+    -fx-transition: all 0.3s ease-in-out;
+    -fx-alignment: center;
+}
+
+.feature-card:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+    -fx-translate-y: -5;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 12, 0, 0, 0);
+}
+
+.feature-icon {
+    -fx-font-size: 32px;
+    -fx-text-fill: #FFC107;
+    -fx-alignment: center;
+}
+
+.feature-title {
+    -fx-font-family: 'Geostar Fill';
+    -fx-font-size: 18px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-padding: 10 0 5 0;
+}
+
+.feature-description {
+    -fx-text-fill: #e0e0e0;
+    -fx-font-size: 14px;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+.feature-cards-container {
+    -fx-alignment: center;
+}
+
+/* Start button */
+.start-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-padding: 15 30;
+    -fx-background-radius: 30;
+    -fx-font-family: 'Geostar Fill';
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 5, 0, 0, 0);
+    -fx-cursor: hand;
+}
+
+.start-button:hover {
+    -fx-background-color: #45a049;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 8, 0, 0, 0);
+}
+
+/* Image container styling */
+.images-container {
+    -fx-alignment: center-left;
+    -fx-pref-width: 1200; /* Adjust to match your application width */
+}
+
+/* Left character image styling */
+#characterImage {
+    -fx-translate-x: 0; /* Ensure it stays left-aligned */
+}
+
+/* Right background image styling */
+#homeImage {
+    -fx-alignment: center-right;
+}
+
+/* Ensure background images fit properly */
+#characterImage, #homeImage {
+    -fx-background-color: transparent;
+}

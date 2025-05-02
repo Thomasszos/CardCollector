@@ -1,9 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.image.Image?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22">
-    <Label text="Home Content Goes Here" AnchorPane.topAnchor="20.0"
-           AnchorPane.leftAnchor="20.0"/>
-</AnchorPane>
+<StackPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.example.cardcollectorproject.controllers.HomeController"
+           stylesheets="@styles/base.css, @styles/home.css">
+
+    <!-- Background Images -->
+    <AnchorPane>
+        <!-- Left side -->
+        <ImageView fx:id="characterImage" fitWidth="500" fitHeight="700" preserveRatio="true"
+                   AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+            <image>
+                <Image url="@images/home-guy.png"/>
+            </image>
+        </ImageView>
+
+        <!-- Right side -->
+        <ImageView fx:id="homeImage" fitWidth="500" fitHeight="500" preserveRatio="true"
+                   AnchorPane.rightAnchor="-100.0" AnchorPane.topAnchor="50.0" AnchorPane.bottomAnchor="50.0">
+            <image>
+                <Image url="@images/home-gengar.png"/>
+            </image>
+        </ImageView>
+    </AnchorPane>
+
+    <!-- Semi-transparent overlay -->
+    <Region styleClass="overlay"/>
+
+    <!-- Main content container -->
+    <VBox spacing="40" styleClass="content-container" alignment="CENTER">
+        <!-- Inner container with transparent white background -->
+        <VBox fx:id="innerContainer" styleClass="inner-container">
+            <!-- App title and description -->
+            <VBox alignment="CENTER" spacing="15">
+                <Label text="PokeMarket" styleClass="home-title"/>
+                <Label text="Discover, buy and trade Pokémon cards with ease!"
+                       wrapText="true" styleClass="home-description" alignment="CENTER"/>
+            </VBox>
+
+            <!-- Feature Cards  -->
+            <VBox spacing="20" alignment="CENTER">
+                <padding>
+                    <Insets top="20" right="0" bottom="0" left="0"/>
+                </padding>
+                <Label text="Features" styleClass="features-header"/>
+
+                <HBox spacing="25" alignment="CENTER" fx:id="featureCardsContainer" styleClass="feature-cards-container">
+                    <!-- Feature 1 -->
+                    <VBox styleClass="feature-card" prefWidth="220">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+                        <Label text="🔍" styleClass="feature-icon"/>
+                        <Label text="Search" styleClass="feature-title"/>
+                        <Label text="Find exactly what you're looking for with powerful search filters"
+                               styleClass="feature-description" wrapText="true"/>
+                    </VBox>
+
+                    <!-- Feature 2 -->
+                    <VBox styleClass="feature-card" prefWidth="220">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+                        <Label text="📊" styleClass="feature-icon"/>
+                        <Label text="Collection" styleClass="feature-title"/>
+                        <Label text="Keep track of all your cards with detailed statistics"
+                               styleClass="feature-description" wrapText="true"/>
+                    </VBox>
+
+                    <!-- Feature 3 -->
+                    <VBox styleClass="feature-card" prefWidth="220">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+                        <Label text="📈" styleClass="feature-icon"/>
+                        <Label text="Watchlist" styleClass="feature-title"/>
+                        <Label text="Monitor card values and get notified of price changes"
+                               styleClass="feature-description" wrapText="true"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Start button -->
+            <Button fx:id="getStartedButton" text="Get Started" styleClass="start-button"
+                    onAction="#handleGetStarted">
+                <VBox.margin>
+                    <Insets top="20" bottom="10"/>
+                </VBox.margin>
+            </Button>
+        </VBox>
+    </VBox>
+</StackPane>
