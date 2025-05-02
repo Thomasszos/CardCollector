@@ -2,37 +2,79 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
 
 <VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22"
       fx:controller="org.example.cardcollectorproject.controllers.MainViewController"
       stylesheets="@styles/base.css, @styles/main-view.css">
 
+    <!-- App Header with Logo and User Info -->
+    <HBox styleClass="header-bar">
+        <padding>
+            <Insets top="10" right="15" bottom="10" left="15"/>
+        </padding>
 
-    <TabPane fx:id="tabPane" VBox.vgrow="ALWAYS"
+        <!-- Logo Area -->
+        <HBox alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS">
+            <ImageView fitHeight="32" fitWidth="32" preserveRatio="true">
+                <image>
+                    <Image url="@images/pokeball.png"/>
+                </image>
+            </ImageView>
+            <Label text="PokeMarket" styleClass="logo-text"/>
+        </HBox>
+
+        <!-- User Info Area -->
+        <HBox alignment="CENTER_RIGHT" spacing="15">
+            <Label fx:id="usernameLabel" text="User" styleClass="user-display"/>
+            <Button fx:id="userSettingsButton" text="⚙" styleClass="icon-button"/>
+        </HBox>
+    </HBox>
+
+    <!-- Navigation Tabs -->
+    <TabPane fx:id="tabPane"
+             styleClass="nav-tab-pane"
+             VBox.vgrow="ALWAYS"
              tabClosingPolicy="UNAVAILABLE">
 
-    <tabs>
+        <tabs>
             <Tab text="Home" styleClass="nav-tab">
+                <graphic>
+                    <Label text="🏠" styleClass="tab-icon"/>
+                </graphic>
                 <content>
                     <fx:include source="home.fxml"/>
                 </content>
             </Tab>
-            <Tab text="Search">
+            <Tab text="Search" styleClass="nav-tab">
+                <graphic>
+                    <Label text="🔍" styleClass="tab-icon"/>
+                </graphic>
                 <content>
                     <fx:include source="search.fxml"/>
                 </content>
             </Tab>
-            <Tab text="Collection">
+            <Tab text="Collection" styleClass="nav-tab">
+                <graphic>
+                    <Label text="📊" styleClass="tab-icon"/>
+                </graphic>
                 <content>
                     <fx:include source="collection.fxml"/>
                 </content>
             </Tab>
-            <Tab text="Watchlist">
+            <Tab text="Watchlist" styleClass="nav-tab">
+                <graphic>
+                    <Label text="📈" styleClass="tab-icon"/>
+                </graphic>
                 <content>
                     <fx:include source="watchlist.fxml"/>
                 </content>
             </Tab>
-            <Tab text="Log Out">
+            <Tab text="Log Out" styleClass="nav-tab, logout-tab">
+                <graphic>
+                    <Label text="🚪" styleClass="tab-icon"/>
+                </graphic>
                 <content>
                     <AnchorPane/>
                 </content>
