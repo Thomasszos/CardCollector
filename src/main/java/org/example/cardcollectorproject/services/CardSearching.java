@@ -18,23 +18,23 @@ public class CardSearching {
     public List<PokemonCard> fetchCards(String nameQuery, String typeQuery, String setQuery, String idQuery) {
         List<PokemonCard> cards = new ArrayList<>();
         try {
-            StringBuilder query = new StringBuilder("supertype:pokemon");
+            StringBuilder query = new StringBuilder();
 
             if (nameQuery != null && !nameQuery.isBlank()) {
-                query.append(" name:").append(nameQuery.trim());
+                query.append("name:").append(nameQuery.trim());
             }
             if (typeQuery != null && !typeQuery.isBlank()) {
-                query.append(" types:").append(typeQuery.trim());
+                if (!query.isEmpty()) query.append(" ");
+                query.append("types:").append(typeQuery.trim());
             }
             if (idQuery != null && !idQuery.isBlank()) {
-                query.append(" number:").append(idQuery.trim());
+                if (!query.isEmpty()) query.append(" ");
+                query.append("number:").append(idQuery.trim());
             }
             if (setQuery != null && !setQuery.isBlank()) {
-                query.append(" set.id:").append(setQuery.trim());
+                if (!query.isEmpty()) query.append(" ");
+                query.append("set.id:").append(setQuery.trim());
             }
-
-            // Exclude special/promotional cards
-            query.append(" -set.name:\"Detective Pikachu\" -set.name:\"Celebrations\" -set.name:\"Pokémon GO\" -name:\"Ash*\" -name:\"Detective*\"");
 
             String encodedQuery = URLEncoder.encode(query.toString(), StandardCharsets.UTF_8);
             String apiUrl = "https://api.pokemontcg.io/v2/cards?q=" + encodedQuery;
