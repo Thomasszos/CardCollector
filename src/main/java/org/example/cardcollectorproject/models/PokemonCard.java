@@ -8,14 +8,16 @@ public class PokemonCard {
     String mechanic; // e.g., GX, EX, V, etc.
     String moves;
     String cardNumber;
+    String set;
 
-    public PokemonCard(String name, String imageUrl, String cardType, String mechanic, String moves, String cardNumber) {
+    public PokemonCard(String name, String imageUrl, String cardType, String mechanic, String moves, String cardNumber, String set) {
         this.name = name;
         this.imageUrl = imageUrl;
         this.cardType = cardType;
         this.mechanic = mechanic;
         this.moves = moves;
         this.cardNumber = cardNumber;
+        this.set = set;
     }
 
     public String getName() {
@@ -50,9 +52,7 @@ public class PokemonCard {
         this.mechanic = mechanic;
     }
 
-    public String getMoves() {
-        return moves;
-    }
+    public String getMoves() {return moves;}
 
     public void setMoves(String moves) {
         this.moves = moves;
@@ -65,9 +65,8 @@ public class PokemonCard {
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
-    @Override
-    public String toString() {
-        return name + " - " + cardType.replace("[", "").replace("]", "");
-    }
 
+    public String getSet() {return set;}
+
+    public void setSet(String set) {this.set = set;}
 }
