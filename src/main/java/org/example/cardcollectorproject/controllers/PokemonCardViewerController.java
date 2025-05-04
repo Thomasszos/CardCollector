@@ -15,9 +15,9 @@ import javafx.util.Duration;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import org.example.cardcollectorproject.api.PokeAPI;
+import org.example.cardcollectorproject.api.TCGio;
 import org.example.cardcollectorproject.models.PokemonCard;
 import org.example.cardcollectorproject.services.CardSearching;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -31,7 +31,6 @@ public class PokemonCardViewerController implements Initializable {
     @FXML private Button searchButton;
     @FXML private ComboBox<String> sortOptions;
     @FXML private ListView<PokemonCard> listView;
-
     @FXML private VBox cardDetailBox;
     @FXML private ImageView cardImageView;
     @FXML private Label nameLabel;
@@ -41,6 +40,9 @@ public class PokemonCardViewerController implements Initializable {
     @FXML private Label cardNumberLabel;
     @FXML private Label descriptionLabel;
     @FXML private Button closeButton;
+    @FXML private Label setLabel;
+    @FXML private Label priceLabel;
+    @FXML private ScrollPane scrollPane;
 
     private final List<PokemonCard> cards = new ArrayList<>();
     private final CardSearching cardService = new CardSearching();
@@ -134,6 +136,14 @@ public class PokemonCardViewerController implements Initializable {
     }
 
     private void showCardDetail(PokemonCard card) {
+
+        scrollPane.setVvalue(0);
+
+        double availableWidth = scrollPane.getWidth() - 30;
+
+        movesLabel.setMaxWidth(availableWidth);
+        descriptionLabel.setMaxWidth(availableWidth);
+
         if (card.getImageUrl() != null && !card.getImageUrl().isEmpty()) {
             cardImageView.setImage(new Image(card.getImageUrl(), 200, 0, true, true));
         } else {
@@ -145,6 +155,15 @@ public class PokemonCardViewerController implements Initializable {
         mechanicLabel.setText("Mechanic: " + card.getMechanic());
         movesLabel.setText("Moves: " + card.getMoves());
         cardNumberLabel.setText("Card #: " + card.getCardNumber());
+        setLabel.setText("Set: " + (card.getSet() != null ? card.getSet() : "Loading..."));
+        priceLabel.setText("Market Price: Loading...");
+
+        new Thread(() -> {
+            double price = TCGio.fetchCardPrice(card.getCardNumber()).join();
+            Platform.runLater(() -> {
+                priceLabel.setText(String.format("Price: $%.2f", price));
+            });
+        }).start();
 
         descriptionLabel.setText("Loading description...");
         new Thread(() -> {
@@ -220,9 +239,3 @@ public class PokemonCardViewerController implements Initializable {
         autoCompletePopup.show(searchField, javafx.geometry.Side.BOTTOM, 0, 0);
     }
 }
-
-
-
-
-
-
