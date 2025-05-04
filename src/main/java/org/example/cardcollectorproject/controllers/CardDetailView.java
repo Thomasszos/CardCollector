@@ -68,7 +68,7 @@ public class CardDetailView {
 
         layout.setFillWidth(true);
 
-        Scene detailScene = new Scene(layout, 800, 650);
+        Scene detailScene = new Scene(layout, 800, 600);
         primaryStage.setScene(detailScene);
     }
     private void fetchAndDisplayPrice(PokemonCard card, Label priceLabel) {

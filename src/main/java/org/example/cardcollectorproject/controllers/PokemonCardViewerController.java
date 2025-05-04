@@ -42,6 +42,7 @@ public class PokemonCardViewerController implements Initializable {
     @FXML private Button closeButton;
     @FXML private Label setLabel;
     @FXML private Label priceLabel;
+    @FXML private ScrollPane scrollPane;
 
     private final List<PokemonCard> cards = new ArrayList<>();
     private final CardSearching cardService = new CardSearching();
@@ -135,6 +136,14 @@ public class PokemonCardViewerController implements Initializable {
     }
 
     private void showCardDetail(PokemonCard card) {
+
+        scrollPane.setVvalue(0);
+
+        double availableWidth = scrollPane.getWidth() - 30;
+
+        movesLabel.setMaxWidth(availableWidth);
+        descriptionLabel.setMaxWidth(availableWidth);
+
         if (card.getImageUrl() != null && !card.getImageUrl().isEmpty()) {
             cardImageView.setImage(new Image(card.getImageUrl(), 200, 0, true, true));
         } else {

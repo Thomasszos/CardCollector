@@ -52,7 +52,8 @@ public class PokemonCard {
         this.mechanic = mechanic;
     }
 
-    public String getMoves() {return moves;}
+    public String getMoves() {
+        return moves;}
 
     public void setMoves(String moves) {
         this.moves = moves;
@@ -66,7 +67,9 @@ public class PokemonCard {
         this.cardNumber = cardNumber;
     }
 
-    public String getSet() {return set;}
+    public String getSet() {
+        return set;}
 
-    public void setSet(String set) {this.set = set;}
+    public void setSet(String set) {
+        this.set = set;}
 }
