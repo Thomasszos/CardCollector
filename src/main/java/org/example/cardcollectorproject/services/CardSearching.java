@@ -3,8 +3,14 @@ package org.example.cardcollectorproject.services;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import org.example.cardcollectorproject.models.PokemonCard;
-import java.io.InputStreamReader;
+import java.util.stream.Collectors;
+
+
+import java.io.*;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -14,10 +20,65 @@ import java.util.List;
 
 public class CardSearching {
 
+    private static final String WATCHLIST_FILE = "watchlist.json";
+    private static final String COLLECTION_FILE = "collection.json";
+
+    public void addToWatchlist(PokemonCard card) {
+        addToFile(WATCHLIST_FILE, card);
+    }
+
+    public void addToCollection(PokemonCard card) {
+        addToFile(COLLECTION_FILE, card);
+    }
+
+    public List<PokemonCard> getWatchlist() {
+        return readFromFile(WATCHLIST_FILE);
+    }
+
+    public List<PokemonCard> getCollection() {
+        return readFromFile(COLLECTION_FILE);
+    }
+
+    private void addToFile(String filename, PokemonCard card) {
+        List<PokemonCard> cards = readFromFile(filename);
+        cards.add(card);
+        try (Writer writer = new FileWriter(filename)) {
+            new Gson().toJson(cards, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<PokemonCard> readFromFile(String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String content = reader.lines().collect(Collectors.joining());
+
+            if (content.isBlank()) {
+                return new ArrayList<>(); // Return empty list if file is blank
+            }
+
+            Type listType = new TypeToken<List<PokemonCard>>() {}.getType();
+            return new Gson().fromJson(content, listType);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        } catch (JsonSyntaxException e) {
+            System.out.println("Malformed JSON. Starting with empty list.");
+            return new ArrayList<>();
+        }
+    }
+
     // New method with all search parameters
     public List<PokemonCard> fetchCards(String name, String type, String set, String id) {
         String query = buildQuery(name, type, set, id);
         return fetchCardsByQuery(query);
+    }
+
+    // Overloaded method with pagination support
+    public List<PokemonCard> fetchCards(String name, String type, String set, String id, int page, int pageSize) {
+        String query = buildQuery(name, type, set, id);
+        return fetchCardsByQuery(query, page, pageSize);
     }
 
     // Original method for backward compatibility
@@ -44,14 +105,20 @@ public class CardSearching {
     }
 
     private List<PokemonCard> fetchCardsByQuery(String query) {
+        return fetchCardsByQuery(query, 1, 10);
+    }
+
+    private List<PokemonCard> fetchCardsByQuery(String query, int page, int pageSize) {
         List<PokemonCard> cards = new ArrayList<>();
         if (query.isBlank()) return cards;
 
         HttpURLConnection conn = null;
         try {
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
-            // Add pageSize=10 parameter to limit results to 10 cards
-            String apiUrl = "https://api.pokemontcg.io/v2/cards?pageSize=10&q=" + encodedQuery;
+            String apiUrl = String.format(
+                    "https://api.pokemontcg.io/v2/cards?page=%d&pageSize=%d&q=%s",
+                    page, pageSize, encodedQuery
+            );
 
             conn = (HttpURLConnection) new URL(apiUrl).openConnection();
             conn.setRequestMethod("GET");
@@ -101,7 +168,6 @@ public class CardSearching {
             imageUrl = images.has("large") ? images.get("large").getAsString() : "";
         }
 
-        // Improved type parsing
         String cardType = "Unknown";
         if (cardJson.has("types")) {
             JsonArray types = cardJson.getAsJsonArray("types");
@@ -110,7 +176,6 @@ public class CardSearching {
             }
         }
 
-        // Improved mechanic parsing
         String mechanic = "N/A";
         if (cardJson.has("subtypes")) {
             JsonArray subtypes = cardJson.getAsJsonArray("subtypes");
@@ -119,7 +184,6 @@ public class CardSearching {
             }
         }
 
-        // Moves parsing
         String moves = "";
         if (cardJson.has("attacks")) {
             JsonArray attacks = cardJson.getAsJsonArray("attacks");
@@ -130,7 +194,6 @@ public class CardSearching {
             moves = movesBuilder.toString().replaceAll(", $", "");
         }
 
-        // Set information
         String set = "";
         if (cardJson.has("set")) {
             JsonObject setObj = cardJson.getAsJsonObject("set");
@@ -139,7 +202,6 @@ public class CardSearching {
             }
         }
 
-        // Card number (prefer id, fallback to number)
         String cardNumber = "";
         if (cardJson.has("id")) {
             cardNumber = cardJson.get("id").getAsString();
