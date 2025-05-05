@@ -26,26 +26,26 @@
     </left>
 
     <center>
-        <VBox fx:id="cardDetailBox" spacing="10" visible="false" managed="false">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-            <Button text="Close" fx:id="closeButton"/>
-            <ImageView fx:id="cardImageView" fitWidth="200"/>
-            <Label fx:id="nameLabel"/>
-            <Label fx:id="typeLabel"/>
-            <Label fx:id="mechanicLabel"/>
-            <Label fx:id="movesLabel"/>
-            <Label fx:id="cardNumberLabel"/>
+        <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER">
+            <VBox fx:id="cardDetailBox" spacing="10" visible="false" managed="false">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <Button text="Close" fx:id="closeButton"/>
+                <ImageView fx:id="cardImageView" fitWidth="200" preserveRatio="true"/>
+                <Label fx:id="nameLabel"/>
+                <Label fx:id="setLabel" text="Set: "/>
+                <Label fx:id="priceLabel" text="Price: "/>
+                <Label fx:id="typeLabel"/>
+                <Label fx:id="mechanicLabel"/>
+                <Label fx:id="movesLabel" wrapText="true"/>
+                <Label fx:id="cardNumberLabel"/>
 
-            <!-- New: Description Label -->
-            <Label fx:id="descriptionLabel" wrapText="true" maxWidth="300"/>
-        </VBox>
+                <!-- New: Description Label -->
+                <Label fx:id="descriptionLabel" wrapText="true" maxWidth="300"/>
+
+            </VBox>
+        </ScrollPane>
     </center>
 
 </BorderPane>
-
-
-
-
-
