@@ -43,7 +43,6 @@ public class CardSearching {
         query.append(prefix).append(value);
     }
 
-    // Core method that handles the actual API request
     private List<PokemonCard> fetchCardsByQuery(String query) {
         List<PokemonCard> cards = new ArrayList<>();
         if (query.isBlank()) return cards;
@@ -51,7 +50,8 @@ public class CardSearching {
         HttpURLConnection conn = null;
         try {
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
-            String apiUrl = "https://api.pokemontcg.io/v2/cards?q=" + encodedQuery;
+            // Add pageSize=10 parameter to limit results to 10 cards
+            String apiUrl = "https://api.pokemontcg.io/v2/cards?pageSize=10&q=" + encodedQuery;
 
             conn = (HttpURLConnection) new URL(apiUrl).openConnection();
             conn.setRequestMethod("GET");
