@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import javafx.application.Platform;
-import org.json.JSONObject;
 import org.example.cardcollectorproject.models.PokemonCard;
 
 import java.io.BufferedReader;
@@ -16,6 +15,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Comparator;
+import org.json.JSONObject;
 import java.util.concurrent.CompletableFuture;
 
 

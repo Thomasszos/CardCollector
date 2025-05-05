@@ -4,6 +4,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.XYChart?>
+<?import javafx.scene.chart.CategoryAxis?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -26,21 +30,37 @@
     </left>
 
     <center>
-        <VBox fx:id="cardDetailBox" spacing="10" visible="false" managed="false">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-            <Button text="Close" fx:id="closeButton"/>
-            <ImageView fx:id="cardImageView" fitWidth="200"/>
-            <Label fx:id="nameLabel"/>
-            <Label fx:id="typeLabel"/>
-            <Label fx:id="mechanicLabel"/>
-            <Label fx:id="movesLabel"/>
-            <Label fx:id="cardNumberLabel"/>
+        <HBox spacing="20">
+            <VBox fx:id="cardDetailBox" spacing="10" visible="false" managed="false">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <Button text="Close" fx:id="closeButton"/>
+                <ImageView fx:id="cardImageView" fitWidth="200"/>
+                <Label fx:id="nameLabel"/>
+                <Label fx:id="typeLabel"/>
+                <Label fx:id="mechanicLabel"/>
+                <Label fx:id="movesLabel"/>
+                <Label fx:id="cardNumberLabel"/>
+                <Label fx:id="priceLabel"/>
+                <Label fx:id="descriptionLabel" wrapText="true" maxWidth="300"/>
+            </VBox>
 
-            <!-- New: Description Label -->
-            <Label fx:id="descriptionLabel" wrapText="true" maxWidth="300"/>
-        </VBox>
+            <VBox fx:id="priceHistoryBox" spacing="10" visible="false" managed="false">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <Label text="Price History" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <LineChart fx:id="priceHistoryChart">
+                    <xAxis>
+                        <CategoryAxis label="Date"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Price ($)"/>
+                    </yAxis>
+                </LineChart>
+            </VBox>
+        </HBox>
     </center>
 
 </BorderPane>

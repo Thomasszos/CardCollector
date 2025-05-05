@@ -5,6 +5,8 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,6 +19,7 @@ import javafx.scene.control.MenuItem;
 import org.example.cardcollectorproject.api.PokeAPI;
 import org.example.cardcollectorproject.models.PokemonCard;
 import org.example.cardcollectorproject.services.CardSearching;
+import org.example.cardcollectorproject.models.CardPrice;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -40,7 +43,10 @@ public class PokemonCardViewerController implements Initializable {
     @FXML private Label movesLabel;
     @FXML private Label cardNumberLabel;
     @FXML private Label descriptionLabel;
+    @FXML private Label priceLabel;
     @FXML private Button closeButton;
+    @FXML private VBox priceHistoryBox;
+    @FXML private LineChart<String, Number> priceHistoryChart;
 
     private final List<PokemonCard> cards = new ArrayList<>();
     private final CardSearching cardService = new CardSearching();
@@ -146,6 +152,23 @@ public class PokemonCardViewerController implements Initializable {
         movesLabel.setText("Moves: " + card.getMoves());
         cardNumberLabel.setText("Card #: " + card.getCardNumber());
 
+        // Display the current price if available
+        List<CardPrice> priceHistory = card.getPriceHistory();
+        if (priceHistory != null && !priceHistory.isEmpty()) {
+            // Get the most recent price
+            CardPrice latestPrice = priceHistory.get(priceHistory.size() - 1);
+            priceLabel.setText(String.format("Current Price: $%.2f", latestPrice.getPrice()));
+
+            // Update price history chart
+            updatePriceHistoryChart(priceHistory);
+            priceHistoryBox.setVisible(true);
+            priceHistoryBox.setManaged(true);
+        } else {
+            priceLabel.setText("Price: Not available");
+            priceHistoryBox.setVisible(false);
+            priceHistoryBox.setManaged(false);
+        }
+
         descriptionLabel.setText("Loading description...");
         new Thread(() -> {
             String description = PokeAPI.getPokemonDescription(card.getName());
@@ -173,9 +196,29 @@ public class PokemonCardViewerController implements Initializable {
         timeline.play();
     }
 
+    private void updatePriceHistoryChart(List<CardPrice> priceHistory) {
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Price History");
+
+        // Sort price history by timestamp
+        priceHistory.sort(Comparator.comparing(CardPrice::getTimestamp));
+
+        // Add data points to the series
+        for (CardPrice price : priceHistory) {
+            String date = price.getTimestamp().toLocalDate().toString();
+            series.getData().add(new XYChart.Data<>(date, price.getPrice()));
+        }
+
+        // Clear existing data and add new series
+        priceHistoryChart.getData().clear();
+        priceHistoryChart.getData().add(series);
+    }
+
     private void hideCardDetail() {
         cardDetailBox.setVisible(false);
         cardDetailBox.setManaged(false);
+        priceHistoryBox.setVisible(false);
+        priceHistoryBox.setManaged(false);
     }
 
     private void showAutoCompleteSuggestions(String query) {
