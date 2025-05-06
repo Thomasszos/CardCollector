@@ -43,10 +43,19 @@ public class PokemonCardViewerController implements Initializable {
     @FXML private Label setLabel;
     @FXML private Label priceLabel;
     @FXML private ScrollPane scrollPane;
+    @FXML private Button prevPageButton;
+    @FXML private Button nextPageButton;
+    @FXML private Label pageInfoLabel;
+    @FXML private Button addToCollectionButton;
+    @FXML private Button addToWatchlistButton;
 
     private final List<PokemonCard> cards = new ArrayList<>();
     private final CardSearching cardService = new CardSearching();
     private final ContextMenu autoCompletePopup = new ContextMenu();
+
+    private int currentPage = 1;
+    private final int pageSize = 10;
+    private PokemonCard selectedCard;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -56,12 +65,42 @@ public class PokemonCardViewerController implements Initializable {
         sortOptions.getItems().addAll("Name", "Type");
         sortOptions.setValue("Name");
 
-        searchButton.setOnAction(e -> searchCards());
-        searchField.setOnAction(e -> searchCards());
+        searchButton.setOnAction(e -> {
+            currentPage = 1;
+            searchCards();
+        });
+        searchField.setOnAction(e -> {
+            currentPage = 1;
+            searchCards();
+        });
         searchField.textProperty().addListener((obs, oldText, newText) -> showAutoCompleteSuggestions(newText));
 
         sortOptions.setOnAction(e -> sortAndDisplayCards());
         closeButton.setOnAction(e -> hideCardDetail());
+
+        prevPageButton.setOnAction(e -> {
+            if (currentPage > 1) {
+                currentPage--;
+                searchCards();
+            }
+        });
+
+        nextPageButton.setOnAction(e -> {
+            currentPage++;
+            searchCards();
+        });
+
+        addToCollectionButton.setOnAction(e -> {
+            if (selectedCard != null) {
+                cardService.addToCollection(selectedCard);
+            }
+        });
+
+        addToWatchlistButton.setOnAction(e -> {
+            if (selectedCard != null) {
+                cardService.addToWatchlist(selectedCard);
+            }
+        });
 
         listView.setOnMouseClicked(this::handleCardClick);
 
@@ -114,7 +153,7 @@ public class PokemonCardViewerController implements Initializable {
         }
 
         cards.clear();
-        cards.addAll(cardService.fetchCards(name, type, set, id));
+        cards.addAll(cardService.fetchCards(name, type, set, id, currentPage, pageSize));
         sortAndDisplayCards();
     }
 
@@ -126,21 +165,19 @@ public class PokemonCardViewerController implements Initializable {
         }
 
         listView.getItems().setAll(cards);
+        pageInfoLabel.setText("Page: " + currentPage);
     }
 
     private void handleCardClick(MouseEvent event) {
-        PokemonCard selectedCard = listView.getSelectionModel().getSelectedItem();
+        selectedCard = listView.getSelectionModel().getSelectedItem();
         if (selectedCard != null) {
             showCardDetail(selectedCard);
         }
     }
 
     private void showCardDetail(PokemonCard card) {
-
         scrollPane.setVvalue(0);
-
         double availableWidth = scrollPane.getWidth() - 30;
-
         movesLabel.setMaxWidth(availableWidth);
         descriptionLabel.setMaxWidth(availableWidth);
 
@@ -160,9 +197,7 @@ public class PokemonCardViewerController implements Initializable {
 
         new Thread(() -> {
             double price = TCGio.fetchCardPrice(card.getCardNumber()).join();
-            Platform.runLater(() -> {
-                priceLabel.setText(String.format("Price: $%.2f", price));
-            });
+            Platform.runLater(() -> priceLabel.setText(String.format("Price: $%.2f", price)));
         }).start();
 
         descriptionLabel.setText("Loading description...");
@@ -211,7 +246,7 @@ public class PokemonCardViewerController implements Initializable {
                 case "Name" -> card.getName();
                 case "Type" -> card.getCardType();
                 case "ID" -> card.getCardNumber();
-                case "Set" -> "";
+                case "Set" -> card.getSet();
                 default -> "";
             };
 
@@ -239,3 +274,4 @@ public class PokemonCardViewerController implements Initializable {
         autoCompletePopup.show(searchField, javafx.geometry.Side.BOTTOM, 0, 0);
     }
 }
+
