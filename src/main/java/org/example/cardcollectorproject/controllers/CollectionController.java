@@ -9,6 +9,7 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import org.example.cardcollectorproject.models.PokemonCard;
 import org.example.cardcollectorproject.services.CardSearching;
+import org.example.cardcollectorproject.services.UserSession;
 
 import java.net.URL;
 import java.util.List;
@@ -16,11 +17,11 @@ import java.util.ResourceBundle;
 
 public class CollectionController implements Initializable {
 
-    // Singleton instance
     private static CollectionController instance;
 
     @FXML private TilePane collectionTilePane;
     @FXML private Label emptyCollectionLabel;
+    @FXML private Label userLabel;
 
     private final CardSearching cardService = new CardSearching();
 
@@ -30,8 +31,16 @@ public class CollectionController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Set the singleton instance when this controller is initialized
         instance = this;
+
+        // Show username if logged in
+        if (UserSession.getInstance().isLoggedIn()) {
+            String username = UserSession.getInstance().getCurrentUser().getUsername();
+            userLabel.setText(username + "'s Collection");
+        } else {
+            userLabel.setText("Card Collection");
+        }
+
         loadCollection();
     }
 
@@ -69,7 +78,6 @@ public class CollectionController implements Initializable {
         return cardBox;
     }
 
-    // Public method to refresh the collection when new cards are added
     public void refreshCollection() {
         loadCollection();
     }

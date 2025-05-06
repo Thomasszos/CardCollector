@@ -101,10 +101,25 @@ public class PokemonCardViewerController implements Initializable {
 
         addToCollectionButton.setOnAction(e -> {
             if (selectedCard != null) {
-                cardService.addToCollection(selectedCard);
-                showSuccessAlert("Collection", selectedCard.getName());
+                List<PokemonCard> collection = cardService.getCollection();
+                boolean isInCollection = collection.stream()
+                        .anyMatch(c -> c.getCardNumber().equals(selectedCard.getCardNumber()));
 
-                // Refresh the collection view using the singleton instance
+                if (isInCollection) {
+                    // Remove from collection
+                    cardService.removeFromCollection(selectedCard.getCardNumber());
+                    addToCollectionButton.setText("Add to Collection");
+                    addToCollectionButton.setStyle("");
+                    showSuccessAlert("Collection", selectedCard.getName(), true);
+                } else {
+                    // Add to collection
+                    cardService.addToCollection(selectedCard);
+                    addToCollectionButton.setText("Remove from Collection");
+                    addToCollectionButton.setStyle("-fx-background-color: #ff6b6b;");
+                    showSuccessAlert("Collection", selectedCard.getName(), false);
+                }
+
+                // Refresh the collection view if available
                 CollectionController collectionController = CollectionController.getInstance();
                 if (collectionController != null) {
                     collectionController.refreshCollection();
@@ -113,10 +128,26 @@ public class PokemonCardViewerController implements Initializable {
         });
 
 
+
         addToWatchlistButton.setOnAction(e -> {
             if (selectedCard != null) {
-                cardService.addToWatchlist(selectedCard);
-                showSuccessAlert("Watchlist", selectedCard.getName());
+                List<PokemonCard> watchlist = cardService.getWatchlist();
+                boolean isInWatchlist = watchlist.stream()
+                        .anyMatch(c -> c.getCardNumber().equals(selectedCard.getCardNumber()));
+
+                if (isInWatchlist) {
+                    // Remove from watchlist
+                    cardService.removeFromWatchlist(selectedCard.getCardNumber());
+                    addToWatchlistButton.setText("Add to Watchlist");
+                    addToWatchlistButton.setStyle("");
+                    showSuccessAlert("Watchlist", selectedCard.getName(), true);
+                } else {
+                    // Add to watchlist
+                    cardService.addToWatchlist(selectedCard);
+                    addToWatchlistButton.setText("Remove from Watchlist");
+                    addToWatchlistButton.setStyle("-fx-background-color: #ff6b6b;");
+                    showSuccessAlert("Watchlist", selectedCard.getName(), false);
+                }
             }
         });
 
@@ -151,11 +182,16 @@ public class PokemonCardViewerController implements Initializable {
         });
     }
 
-    private void showSuccessAlert(String destination, String cardName) {
+    private void showSuccessAlert(String destination, String cardName, boolean isRemoval) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Card Added");
+        if (isRemoval) {
+            alert.setTitle("Card Removed");
+            alert.setContentText(cardName + " has been removed from your " + destination + "!");
+        } else {
+            alert.setTitle("Card Added");
+            alert.setContentText(cardName + " has been added to your " + destination + "!");
+        }
         alert.setHeaderText(null);
-        alert.setContentText(cardName + " has been added to your " + destination + "!");
         alert.show();
 
         // Auto-close the alert after 2 seconds
@@ -241,6 +277,34 @@ public class PokemonCardViewerController implements Initializable {
 
         cardDetailBox.setVisible(true);
         cardDetailBox.setManaged(true);
+
+        // Check if the card is already in the collection or watchlist
+        List<PokemonCard> collection = cardService.getCollection();
+        boolean isInCollection = collection.stream()
+                .anyMatch(c -> c.getCardNumber().equals(card.getCardNumber()));
+
+        if (isInCollection) {
+            addToCollectionButton.setText("Remove from Collection");
+            addToCollectionButton.setStyle("-fx-background-color: #ff6b6b;");
+        } else {
+            addToCollectionButton.setText("Add to Collection");
+            addToCollectionButton.setStyle("");
+        }
+
+
+        List<PokemonCard> watchlist = cardService.getWatchlist();
+        boolean isInWatchlist = watchlist.stream()
+                .anyMatch(c -> c.getCardNumber().equals(card.getCardNumber()));
+
+        if (isInWatchlist) {
+            addToWatchlistButton.setText("Remove from Watchlist");
+            addToWatchlistButton.setStyle("-fx-background-color: #ff6b6b;");
+        } else {
+            addToWatchlistButton.setText("Add to Watchlist");
+            addToWatchlistButton.setStyle("");
+        }
+
+
     }
 
     private void animateDescription(String text) {

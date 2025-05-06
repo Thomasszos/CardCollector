@@ -6,7 +6,9 @@ public class UserSession {
     private static UserSession instance;
     private User currentUser;
 
-    private UserSession() {}
+    private UserSession() {
+        // Private constructor for singleton
+    }
 
     public static UserSession getInstance() {
         if (instance == null) {
@@ -15,19 +17,19 @@ public class UserSession {
         return instance;
     }
 
-    public void setCurrentUser(User user) {
-        this.currentUser = user;
-    }
-
     public User getCurrentUser() {
         return currentUser;
+    }
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
     }
 
     public void clearSession() {
         this.currentUser = null;
     }
-//
-//    public boolean isLoggedIn() {
-//        return currentUser != null;
-//    }
+
+    public boolean isLoggedIn() {
+        return currentUser != null;
+    }
 }

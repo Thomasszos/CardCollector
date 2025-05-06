@@ -7,6 +7,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import org.example.cardcollectorproject.models.PokemonCard;
+import org.example.cardcollectorproject.models.UserCollection;
+
 import java.util.stream.Collectors;
 
 
@@ -21,54 +23,80 @@ import java.util.List;
 
 public class CardSearching {
 
-    private static final String WATCHLIST_FILE = "watchlist.json";
-    private static final String COLLECTION_FILE = "collection.json";
+    private final CosmosDbService dbService;
 
-    public void addToWatchlist(PokemonCard card) {
-        addToFile(WATCHLIST_FILE, card);
+    public CardSearching() {
+        this.dbService = new CosmosDbService();
     }
 
     public void addToCollection(PokemonCard card) {
-        addToFile(COLLECTION_FILE, card);
+        // Get the current user
+        UserSession session = UserSession.getInstance();
+        if (session.isLoggedIn()) {
+            String userId = session.getCurrentUser().getUserId();
+            dbService.addCardToUserCollection(userId, "collection", card);
+        } else {
+            System.err.println("No user logged in. Cannot add card to collection.");
+        }
     }
 
-    public List<PokemonCard> getWatchlist() {
-        return readFromFile(WATCHLIST_FILE);
+    public void addToWatchlist(PokemonCard card) {
+        // Get the current user
+        UserSession session = UserSession.getInstance();
+        if (session.isLoggedIn()) {
+            String userId = session.getCurrentUser().getUserId();
+            dbService.addCardToUserCollection(userId, "watchlist", card);
+        } else {
+            System.err.println("No user logged in. Cannot add card to watchlist.");
+        }
     }
 
     public List<PokemonCard> getCollection() {
-        return readFromFile(COLLECTION_FILE);
-    }
-
-    private void addToFile(String filename, PokemonCard card) {
-        List<PokemonCard> cards = readFromFile(filename);
-        cards.add(card);
-        try (Writer writer = new FileWriter(filename)) {
-            new Gson().toJson(cards, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public List<PokemonCard> readFromFile(String filePath) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String content = reader.lines().collect(Collectors.joining());
-
-            if (content.isBlank()) {
-                return new ArrayList<>(); // Return empty list if file is blank
-            }
-
-            Type listType = new TypeToken<List<PokemonCard>>() {}.getType();
-            return new Gson().fromJson(content, listType);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        } catch (JsonSyntaxException e) {
-            System.out.println("Malformed JSON. Starting with empty list.");
+        // Get the current user
+        UserSession session = UserSession.getInstance();
+        if (session.isLoggedIn()) {
+            String userId = session.getCurrentUser().getUserId();
+            UserCollection collection = dbService.getUserCollection(userId, "collection");
+            return collection.getCards();
+        } else {
+            System.err.println("No user logged in. Cannot retrieve collection.");
             return new ArrayList<>();
         }
     }
+
+    public List<PokemonCard> getWatchlist() {
+        // Get the current user
+        UserSession session = UserSession.getInstance();
+        if (session.isLoggedIn()) {
+            String userId = session.getCurrentUser().getUserId();
+            UserCollection watchlist = dbService.getUserCollection(userId, "watchlist");
+            return watchlist.getCards();
+        } else {
+            System.err.println("No user logged in. Cannot retrieve watchlist.");
+            return new ArrayList<>();
+        }
+    }
+
+    public void removeFromCollection(String cardNumber) {
+        UserSession session = UserSession.getInstance();
+        if (session.isLoggedIn()) {
+            String userId = session.getCurrentUser().getUserId();
+            dbService.removeCardFromUserCollection(userId, "collection", cardNumber);
+        } else {
+            System.err.println("No user logged in. Cannot remove card from collection.");
+        }
+    }
+
+    public void removeFromWatchlist(String cardNumber) {
+        UserSession session = UserSession.getInstance();
+        if (session.isLoggedIn()) {
+            String userId = session.getCurrentUser().getUserId();
+            dbService.removeCardFromUserCollection(userId, "watchlist", cardNumber);
+        } else {
+            System.err.println("No user logged in. Cannot remove card from watchlist.");
+        }
+    }
+
 
     // New method with all search parameters
     public List<PokemonCard> fetchCards(String name, String type, String set, String id) {
@@ -212,21 +240,21 @@ public class CardSearching {
 
         return new PokemonCard(name, imageUrl, cardType, mechanic, moves, cardNumber, set);
     }
-    public List<PokemonCard> loadCollection() {
-        List<PokemonCard> collectionCards = new ArrayList<>();
-
-        try {
-            File file = new File(COLLECTION_FILE);
-            if (file.exists()) {
-                ObjectMapper mapper = new ObjectMapper();
-                collectionCards = mapper.readValue(file,
-                        mapper.getTypeFactory().constructCollectionType(List.class, PokemonCard.class));
-            }
-        } catch (IOException e) {
-            System.err.println("Error loading collection: " + e.getMessage());
-        }
-
-        return collectionCards;
-    }
+//    public List<PokemonCard> loadCollection() {
+//        List<PokemonCard> collectionCards = new ArrayList<>();
+//
+//        try {
+//            File file = new File(COLLECTION_FILE);
+//            if (file.exists()) {
+//                ObjectMapper mapper = new ObjectMapper();
+//                collectionCards = mapper.readValue(file,
+//                        mapper.getTypeFactory().constructCollectionType(List.class, PokemonCard.class));
+//            }
+//        } catch (IOException e) {
+//            System.err.println("Error loading collection: " + e.getMessage());
+//        }
+//
+//        return collectionCards;
+//    }
 }
 
