@@ -22,6 +22,7 @@ module org.example.cardcollectorproject {
     requires java.desktop;
     requires java.smartcardio;
     requires spring.data.commons;
+    requires javafx.media;
 
 
     // Combined opens/exports

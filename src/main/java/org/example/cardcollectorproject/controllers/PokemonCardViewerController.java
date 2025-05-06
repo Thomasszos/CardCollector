@@ -18,6 +18,8 @@ import org.example.cardcollectorproject.api.PokeAPI;
 import org.example.cardcollectorproject.api.TCGio;
 import org.example.cardcollectorproject.models.PokemonCard;
 import org.example.cardcollectorproject.services.CardSearching;
+import org.example.cardcollectorproject.utils.AudioManager;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -47,6 +49,7 @@ public class PokemonCardViewerController implements Initializable {
     private final List<PokemonCard> cards = new ArrayList<>();
     private final CardSearching cardService = new CardSearching();
     private final ContextMenu autoCompletePopup = new ContextMenu();
+    private final AudioManager audioManager = AudioManager.getInstance();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -56,12 +59,34 @@ public class PokemonCardViewerController implements Initializable {
         sortOptions.getItems().addAll("Name", "Type");
         sortOptions.setValue("Name");
 
-        searchButton.setOnAction(e -> searchCards());
-        searchField.setOnAction(e -> searchCards());
+        // Add click sound to search button
+        searchButton.setOnAction(e -> {
+            playButtonClickSound();
+            searchCards();
+        });
+
+        // Add click sound to search field Enter key action
+        searchField.setOnAction(e -> {
+            playButtonClickSound();
+            searchCards();
+        });
+
         searchField.textProperty().addListener((obs, oldText, newText) -> showAutoCompleteSuggestions(newText));
 
-        sortOptions.setOnAction(e -> sortAndDisplayCards());
-        closeButton.setOnAction(e -> hideCardDetail());
+        // Add click sound to sort options
+        sortOptions.setOnAction(e -> {
+            playButtonClickSound();
+            sortAndDisplayCards();
+        });
+
+        // Add click sound to close button
+        closeButton.setOnAction(e -> {
+            playButtonClickSound();
+            hideCardDetail();
+        });
+
+        // Add click sound to searchCriteriaBox
+        searchCriteriaBox.setOnAction(e -> playButtonClickSound());
 
         listView.setOnMouseClicked(this::handleCardClick);
 
@@ -92,6 +117,13 @@ public class PokemonCardViewerController implements Initializable {
                 }
             }
         });
+    }
+
+    /**
+     * Play the button click sound effect
+     */
+    private void playButtonClickSound() {
+        audioManager.playSoundEffect("clicks.wav");
     }
 
     private void searchCards() {
@@ -131,12 +163,12 @@ public class PokemonCardViewerController implements Initializable {
     private void handleCardClick(MouseEvent event) {
         PokemonCard selectedCard = listView.getSelectionModel().getSelectedItem();
         if (selectedCard != null) {
+            playButtonClickSound();
             showCardDetail(selectedCard);
         }
     }
 
     private void showCardDetail(PokemonCard card) {
-
         scrollPane.setVvalue(0);
 
         double availableWidth = scrollPane.getWidth() - 30;
@@ -229,6 +261,7 @@ public class PokemonCardViewerController implements Initializable {
         for (String suggestion : suggestions.subList(0, Math.min(suggestions.size(), 5))) {
             MenuItem item = new MenuItem(suggestion);
             item.setOnAction(e -> {
+                playButtonClickSound();
                 searchField.setText(suggestion);
                 searchCards();
             });

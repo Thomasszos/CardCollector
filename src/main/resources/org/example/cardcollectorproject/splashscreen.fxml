@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.shape.Rectangle?>
+
+
+<!-- Removed the style attribute from StackPane -->
+<?import javafx.scene.layout.Region?>
+<StackPane fx:id="splashPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.example.cardcollectorproject.controllers.SplashController"
+           stylesheets="@styles/base.css">
+
+    <!-- Add ImageView for the background -->
+    <ImageView fx:id="backgroundImageSplash" fitHeight="680.0" fitWidth="1150.0" pickOnBounds="true" preserveRatio="false">
+        <image>
+            <Image url="@images/splash-background.png"/>
+        </image>
+    </ImageView>
+
+    <!-- Semi-transparent overlay -->
+    <Region style="-fx-background-color: rgba(0, 0, 0, 0.5);"/>
+
+
+
+    <!-- Scanline effect container -->
+    <Pane fx:id="scanlineContainer" style="-fx-background-color: transparent;" visible="true"/>
+
+    <VBox fx:id="contentBox" alignment="CENTER" spacing="20.0">
+        <!-- Pokémon logo area -->
+        <ImageView fx:id="logoImage" fitHeight="240.0" fitWidth="240.0" preserveRatio="true">
+            <Image url="@images/splash_logo.png"/>
+        </ImageView>
+
+        <!-- App title with Pokémon-style font -->
+        <Label fx:id="appTitleLabel"
+               style="-fx-font-size: 28px; -fx-font-family: 'Geostar Fill'; -fx-text-fill: #FFCB05; -fx-font-weight: bold; -fx-effect: dropshadow(three-pass-box, #3B4CCA, 4, 0, 0, 0);"
+               text="Poke Market"/>
+
+        <!-- Professor Oak-style intro message -->
+        <Label fx:id="welcomeLabel"
+               style="-fx-font-size: 16px; -fx-text-fill: white; -fx-font-family: 'Tektur';"
+               text="Welcome to the world of Pokémon Cards!"
+               visible="false"/>
+
+        <!-- Loading text in Game Boy style -->
+        <Label fx:id="loadingLabel"
+               style="-fx-font-size: 14px; -fx-text-fill: #8BFC7E; -fx-font-family: 'Tektur';"
+               text="Loading..."/>
+
+        <!-- Game Boy style progress bar -->
+        <ProgressBar fx:id="loadingBar" prefWidth="300.0" progress="0.0"
+                     style="-fx-accent: #8BFC7E; -fx-background-color: #0F380F; -fx-background-radius: 0; -fx-border-color: #8BFC7E; -fx-border-width: 2;"/>
+
+        <!-- Pokéball as loading indicator -->
+        <ImageView fx:id="pokeballImage" fitHeight="40.0" fitWidth="40.0" preserveRatio="true" visible="false">
+            <Image url="@images/pokeball.png"/>
+        </ImageView>
+    </VBox>
+
+
+    <!-- This overlay will now appear on top of the background image -->
+    <Rectangle fx:id="screenOverlay" width="1150" height="680" fill="#000000" opacity="0"/>
+</StackPane>

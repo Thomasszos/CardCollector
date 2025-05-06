@@ -16,6 +16,7 @@ import org.example.cardcollectorproject.exceptions.ValidationException;
 import org.example.cardcollectorproject.services.AuthenticationService;
 import org.example.cardcollectorproject.services.UIAnimationService;
 import org.example.cardcollectorproject.services.ValidationService;
+import org.example.cardcollectorproject.utils.AudioManager;
 
 import javafx.scene.image.ImageView;
 
@@ -54,20 +55,39 @@ public class LogInController {
     private final AuthenticationService authService;
     private final UIAnimationService animationService;
     private final ValidationService validationService;
+    private final AudioManager audioManager;
     private boolean isLoginMode = true;
 
     public LogInController() {
         this.authService = new AuthenticationService();
         this.animationService = new UIAnimationService();
         this.validationService = new ValidationService();
+        this.audioManager = AudioManager.getInstance();
     }
 
     @FXML
     public void initialize() {
         setupInitialState();
         setupButtonStyles();
+        setupButtonSounds();
         animationService.startBackgroundAnimation(backgroundImage);
+    }
 
+    /**
+     * Set up sound effects for all buttons in the login form
+     */
+    private void setupButtonSounds() {
+        // Add click sound to all buttons
+        loginButton.setOnMouseClicked(event -> playButtonClickSound());
+        signUpButton.setOnMouseClicked(event -> playButtonClickSound());
+        submitButton.setOnMouseClicked(event -> playButtonClickSound());
+    }
+
+    /**
+     * Play the button click sound effect
+     */
+    private void playButtonClickSound() {
+        audioManager.playSoundEffect("clicks.wav");
     }
 
     private void setupInitialState() {
@@ -99,12 +119,13 @@ public class LogInController {
         GridPane.setRowIndex(emailField, 3);
         GridPane.setRowIndex(emailLabel, 3);
 
-        submitButton.setText(isLoginMode ? "Login" : "Sign Up");
-    }
+        submitButton.setText(isLoginMode ? "Login" : "Sign Up"); }
 
 
 
-    private void setupButtonStyles() {
+
+
+        private void setupButtonStyles() {
 
         loginButton.getStyleClass().add("auth-button");
         signUpButton.getStyleClass().add("auth-button");
