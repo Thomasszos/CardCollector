@@ -2,8 +2,35 @@
 
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22">
-    <Label text="Collection Content Goes Here" AnchorPane.topAnchor="20.0"
-           AnchorPane.leftAnchor="20.0"/>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22"
+            fx:controller="org.example.cardcollectorproject.controllers.CollectionController">
+    <VBox AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+        <Label text="My Collection" style="-fx-font-size: 20px; -fx-font-weight: bold;"
+               AnchorPane.topAnchor="10.0" AnchorPane.leftAnchor="10.0">
+            <VBox.margin>
+                <Insets top="10" left="10" bottom="10"/>
+            </VBox.margin>
+        </Label>
+
+        <Label fx:id="emptyCollectionLabel" text="Your collection is empty. Add cards from the card viewer!"
+               visible="true" wrapText="true">
+            <VBox.margin>
+                <Insets top="20" left="20" right="20"/>
+            </VBox.margin>
+        </Label>
+
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+            <TilePane fx:id="collectionTilePane" hgap="10" vgap="10" prefColumns="4">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+            </TilePane>
+        </ScrollPane>
+    </VBox>
 </AnchorPane>

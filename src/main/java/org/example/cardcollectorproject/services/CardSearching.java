@@ -1,5 +1,6 @@
 package org.example.cardcollectorproject.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -210,6 +211,22 @@ public class CardSearching {
         }
 
         return new PokemonCard(name, imageUrl, cardType, mechanic, moves, cardNumber, set);
+    }
+    public List<PokemonCard> loadCollection() {
+        List<PokemonCard> collectionCards = new ArrayList<>();
+
+        try {
+            File file = new File(COLLECTION_FILE);
+            if (file.exists()) {
+                ObjectMapper mapper = new ObjectMapper();
+                collectionCards = mapper.readValue(file,
+                        mapper.getTypeFactory().constructCollectionType(List.class, PokemonCard.class));
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading collection: " + e.getMessage());
+        }
+
+        return collectionCards;
     }
 }
 

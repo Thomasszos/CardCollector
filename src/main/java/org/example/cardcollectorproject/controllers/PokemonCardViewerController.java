@@ -57,6 +57,15 @@ public class PokemonCardViewerController implements Initializable {
     private final int pageSize = 10;
     private PokemonCard selectedCard;
 
+    private CollectionController collectionController;
+
+    // Then add a setter method so the main application can set the reference
+    public void setCollectionController(CollectionController collectionController) {
+        this.collectionController = collectionController;
+    }
+
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         searchCriteriaBox.getItems().addAll("Name", "Type", "ID", "Set");
@@ -93,12 +102,21 @@ public class PokemonCardViewerController implements Initializable {
         addToCollectionButton.setOnAction(e -> {
             if (selectedCard != null) {
                 cardService.addToCollection(selectedCard);
+                showSuccessAlert("Collection", selectedCard.getName());
+
+                // Refresh the collection view using the singleton instance
+                CollectionController collectionController = CollectionController.getInstance();
+                if (collectionController != null) {
+                    collectionController.refreshCollection();
+                }
             }
         });
+
 
         addToWatchlistButton.setOnAction(e -> {
             if (selectedCard != null) {
                 cardService.addToWatchlist(selectedCard);
+                showSuccessAlert("Watchlist", selectedCard.getName());
             }
         });
 
@@ -131,6 +149,18 @@ public class PokemonCardViewerController implements Initializable {
                 }
             }
         });
+    }
+
+    private void showSuccessAlert(String destination, String cardName) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Card Added");
+        alert.setHeaderText(null);
+        alert.setContentText(cardName + " has been added to your " + destination + "!");
+        alert.show();
+
+        // Auto-close the alert after 2 seconds
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> alert.close()));
+        timeline.play();
     }
 
     private void searchCards() {
@@ -274,4 +304,3 @@ public class PokemonCardViewerController implements Initializable {
         autoCompletePopup.show(searchField, javafx.geometry.Side.BOTTOM, 0, 0);
     }
 }
-
