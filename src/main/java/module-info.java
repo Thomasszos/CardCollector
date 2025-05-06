@@ -18,17 +18,17 @@ module org.example.cardcollectorproject {
     requires com.google.gson;
     requires java.net.http;
 
-    // Combined requirements
     requires java.desktop;
     requires java.smartcardio;
     requires spring.data.commons;
     requires javafx.media;
 
-
-    // Combined opens/exports
     opens org.example.cardcollectorproject to javafx.fxml, com.google.gson;
     opens org.example.cardcollectorproject.controllers to javafx.fxml, com.google.gson;
+    opens org.example.cardcollectorproject.models to com.google.gson; // ← this line is required
+
     exports org.example.cardcollectorproject;
     exports org.example.cardcollectorproject.controllers;
 }
+
 
