@@ -274,3 +274,4 @@ public class PokemonCardViewerController implements Initializable {
         autoCompletePopup.show(searchField, javafx.geometry.Side.BOTTOM, 0, 0);
     }
 }
+

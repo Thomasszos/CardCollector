@@ -212,3 +212,4 @@ public class CardSearching {
         return new PokemonCard(name, imageUrl, cardType, mechanic, moves, cardNumber, set);
     }
 }
+
