@@ -4,25 +4,34 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.chart.XYChart?>
-<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.geometry.Pos?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.example.cardcollectorproject.controllers.PokemonCardViewerController">
 
     <top>
-        <HBox spacing="10">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-            <ComboBox fx:id="searchCriteriaBox" prefWidth="150"/>
-            <TextField fx:id="searchField" promptText="Enter search..."/>
-            <Button fx:id="searchButton" text="Search"/>
-            <ComboBox fx:id="sortOptions" prefWidth="150"/>
-        </HBox>
+        <VBox spacing="5">
+            <HBox spacing="10">
+                <padding>
+                    <Insets top="10" right="10" bottom="5" left="10"/>
+                </padding>
+                <ComboBox fx:id="searchCriteriaBox" prefWidth="150"/>
+                <TextField fx:id="searchField" promptText="Enter search..."/>
+                <Button fx:id="searchButton" text="Search"/>
+                <ComboBox fx:id="sortOptions" prefWidth="150"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER">
+                <padding>
+                    <Insets top="0" right="10" bottom="10" left="10"/>
+                </padding>
+                <Button fx:id="prevPageButton" text="Previous"/>
+                <Label fx:id="pageNumberLabel" text="Page 1"/>
+                <Label fx:id="pageInfoLabel" text=""/>
+                <Button fx:id="nextPageButton" text="Next"/>
+            </HBox>
+        </VBox>
     </top>
 
     <left>
@@ -30,42 +39,30 @@
     </left>
 
     <center>
-        <HBox spacing="20">
+        <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER">
             <VBox fx:id="cardDetailBox" spacing="10" visible="false" managed="false">
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
                 </padding>
-                <Button text="Close" fx:id="closeButton"/>
-                <ImageView fx:id="cardImageView" fitWidth="200"/>
+
+                <HBox spacing="10">
+                    <Button fx:id="addToCollectionButton" text="Add to Collection"/>
+                    <Button fx:id="addToWatchlistButton" text="Add to Watchlist"/>
+                </HBox>
+
+                <Button fx:id="closeButton" text="Close"/>
+                <ImageView fx:id="cardImageView" fitWidth="200" preserveRatio="true"/>
                 <Label fx:id="nameLabel"/>
+                <Label fx:id="setLabel" text="Set:"/>
+                <Label fx:id="priceLabel" text="Price:"/>
                 <Label fx:id="typeLabel"/>
                 <Label fx:id="mechanicLabel"/>
-                <Label fx:id="movesLabel"/>
+                <Label fx:id="movesLabel" wrapText="true"/>
                 <Label fx:id="cardNumberLabel"/>
-                <Label fx:id="priceLabel"/>
                 <Label fx:id="descriptionLabel" wrapText="true" maxWidth="300"/>
             </VBox>
-
-            <VBox fx:id="priceHistoryBox" spacing="10" visible="false" managed="false">
-                <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
-                </padding>
-                <Label text="Price History" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-                <LineChart fx:id="priceHistoryChart">
-                    <xAxis>
-                        <CategoryAxis label="Date"/>
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis label="Price ($)"/>
-                    </yAxis>
-                </LineChart>
-            </VBox>
-        </HBox>
+        </ScrollPane>
     </center>
 
 </BorderPane>
-
-
-
-
 
