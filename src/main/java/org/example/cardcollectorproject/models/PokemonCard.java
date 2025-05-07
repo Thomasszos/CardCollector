@@ -20,6 +20,9 @@ public class PokemonCard {
         this.set = set;
     }
 
+    public PokemonCard() {
+    }
+
     public String getName() {
         return name;
     }

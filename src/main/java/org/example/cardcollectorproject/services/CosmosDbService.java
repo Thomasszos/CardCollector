@@ -5,6 +5,7 @@ import com.azure.cosmos.models.*;
 import com.azure.cosmos.util.CosmosPagedIterable;
 import org.example.cardcollectorproject.config.DatabaseConfig;
 import org.example.cardcollectorproject.models.User;
+import org.example.cardcollectorproject.models.CardPrice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 public class CosmosDbService {
     private final CosmosClient cosmosClient;
     private final CosmosContainer usersContainer;
+    private final CosmosContainer cardPriceContainer;
 
     public CosmosDbService() {
         DatabaseConfig config = DatabaseConfig.getInstance();
@@ -23,6 +25,7 @@ public class CosmosDbService {
 
         CosmosDatabase database = cosmosClient.getDatabase(config.getCosmosDatabaseName());
         this.usersContainer = database.getContainer(config.getCosmosContainerName());
+        this.cardPriceContainer = database.getContainer(config.getCardPriceContainerName());
     }
 
     /**
@@ -89,19 +92,28 @@ public class CosmosDbService {
         return null; // Return null if no user with the given username is found
     }
 
-//    public static void main(String[] args) {
-//        CosmosDbService dbService = new CosmosDbService();
-//
-//        // Create a new user: This should be called only once
-//        User testUser = new User("testUser", "newsteven@example.com", "testPassword");
-//        dbService.createUser(testUser); // Only one call to `createUser`
-//
-//        // Retrieve the created user
-//        User retrievedUser = dbService.getUser(testUser.getUserId());
-//        if (retrievedUser != null) {
-//            System.out.println("User retrieved: " + retrievedUser.getUsername());
-//        } else {
-//            System.out.println("User not found!");
-//        }
-//    }
+    public void saveCardPrice(CardPrice cardPrice) {
+        try {
+            if (cardPrice.getId() == null) {
+                cardPrice.setId(java.util.UUID.randomUUID().toString());
+            }
+            cardPriceContainer.createItem(cardPrice, new PartitionKey(cardPrice.getCardprice()), new CosmosItemRequestOptions());
+        } catch (CosmosException e) {
+            System.err.println("Error saving card price: " + e.getMessage());
+        }
+    }
+
+    public List<CardPrice> getCardPriceHistory(String cardNumber) {
+        String query = "SELECT * FROM c WHERE c.cardprice = @cardprice ORDER BY c.timestamp";
+        CosmosQueryRequestOptions options = new CosmosQueryRequestOptions();
+        List<SqlParameter> parameters = new ArrayList<>();
+        parameters.add(new SqlParameter("@cardprice", cardNumber));
+        SqlQuerySpec querySpec = new SqlQuerySpec(query, parameters);
+        List<CardPrice> result = new ArrayList<>();
+        CosmosPagedIterable<CardPrice> queryResult = cardPriceContainer.queryItems(querySpec, options, CardPrice.class);
+        for (CardPrice cp : queryResult) {
+            result.add(cp);
+        }
+        return result;
+    }
 }

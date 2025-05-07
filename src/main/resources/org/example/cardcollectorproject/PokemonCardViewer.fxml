@@ -5,6 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Pos?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -40,27 +43,37 @@
 
     <center>
         <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER">
-            <VBox fx:id="cardDetailBox" spacing="10" visible="false" managed="false">
-                <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
-                </padding>
+            <HBox spacing="20">
+                <VBox fx:id="cardDetailBox" spacing="10" visible="false" managed="false">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
 
-                <HBox spacing="10">
-                    <Button fx:id="addToCollectionButton" text="Add to Collection"/>
-                    <Button fx:id="addToWatchlistButton" text="Add to Watchlist"/>
-                </HBox>
+                    <HBox spacing="10">
+                        <Button fx:id="addToCollectionButton" text="Add to Collection"/>
+                        <Button fx:id="addToWatchlistButton" text="Add to Watchlist"/>
+                    </HBox>
 
-                <Button fx:id="closeButton" text="Close"/>
-                <ImageView fx:id="cardImageView" fitWidth="200" preserveRatio="true"/>
-                <Label fx:id="nameLabel"/>
-                <Label fx:id="setLabel" text="Set:"/>
-                <Label fx:id="priceLabel" text="Price:"/>
-                <Label fx:id="typeLabel"/>
-                <Label fx:id="mechanicLabel"/>
-                <Label fx:id="movesLabel" wrapText="true"/>
-                <Label fx:id="cardNumberLabel"/>
-                <Label fx:id="descriptionLabel" wrapText="true" maxWidth="300"/>
-            </VBox>
+                    <Button fx:id="closeButton" text="Close"/>
+                    <ImageView fx:id="cardImageView" fitWidth="200" preserveRatio="true"/>
+                    <Label fx:id="nameLabel"/>
+                    <Label fx:id="setLabel" text="Set:"/>
+                    <Label fx:id="priceLabel" text="Price:"/>
+                    <Label fx:id="typeLabel"/>
+                    <Label fx:id="mechanicLabel"/>
+                    <Label fx:id="movesLabel" wrapText="true"/>
+                    <Label fx:id="cardNumberLabel"/>
+                    <Label fx:id="descriptionLabel" wrapText="true" maxWidth="300"/>
+                </VBox>
+                <LineChart fx:id="priceHistoryChart" title="Price History" minWidth="400">
+                    <xAxis>
+                        <CategoryAxis label="Date"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Price ($)"/>
+                    </yAxis>
+                </LineChart>
+            </HBox>
         </ScrollPane>
     </center>
 

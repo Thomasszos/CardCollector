@@ -18,11 +18,20 @@ import org.example.cardcollectorproject.api.PokeAPI;
 import org.example.cardcollectorproject.api.TCGio;
 import org.example.cardcollectorproject.models.PokemonCard;
 import org.example.cardcollectorproject.services.CardSearching;
+import org.example.cardcollectorproject.services.PriceTrackingService;
+import org.example.cardcollectorproject.services.CardPriceRepository;
+import org.example.cardcollectorproject.models.CardPrice;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
+import org.example.cardcollectorproject.services.CosmosCardPriceRepository;
+import org.example.cardcollectorproject.services.CosmosDbService;
 
 public class PokemonCardViewerController implements Initializable {
 
@@ -48,10 +57,14 @@ public class PokemonCardViewerController implements Initializable {
     @FXML private Label pageInfoLabel;
     @FXML private Button addToCollectionButton;
     @FXML private Button addToWatchlistButton;
+    @FXML private LineChart<String, Number> priceHistoryChart;
 
     private final List<PokemonCard> cards = new ArrayList<>();
     private final CardSearching cardService = new CardSearching();
     private final ContextMenu autoCompletePopup = new ContextMenu();
+    private final PriceTrackingService priceTrackingService = new PriceTrackingService(
+        new CosmosCardPriceRepository(new CosmosDbService())
+    );
 
     private int currentPage = 1;
     private final int pageSize = 10;
@@ -198,6 +211,9 @@ public class PokemonCardViewerController implements Initializable {
         new Thread(() -> {
             double price = TCGio.fetchCardPrice(card.getCardNumber()).join();
             Platform.runLater(() -> priceLabel.setText(String.format("Price: $%.2f", price)));
+            priceTrackingService.savePriceForCard(card, price);
+            List<CardPrice> history = priceTrackingService.getPriceHistory(card);
+            Platform.runLater(() -> updatePriceHistoryChart(history));
         }).start();
 
         descriptionLabel.setText("Loading description...");
@@ -211,6 +227,8 @@ public class PokemonCardViewerController implements Initializable {
 
         cardDetailBox.setVisible(true);
         cardDetailBox.setManaged(true);
+        priceHistoryChart.setVisible(true);
+        priceHistoryChart.setManaged(true);
     }
 
     private void animateDescription(String text) {
@@ -230,6 +248,8 @@ public class PokemonCardViewerController implements Initializable {
     private void hideCardDetail() {
         cardDetailBox.setVisible(false);
         cardDetailBox.setManaged(false);
+        priceHistoryChart.setVisible(false);
+        priceHistoryChart.setManaged(false);
     }
 
     private void showAutoCompleteSuggestions(String query) {
@@ -272,6 +292,17 @@ public class PokemonCardViewerController implements Initializable {
 
         autoCompletePopup.getItems().setAll(menuItems);
         autoCompletePopup.show(searchField, javafx.geometry.Side.BOTTOM, 0, 0);
+    }
+
+    private void updatePriceHistoryChart(List<CardPrice> history) {
+        priceHistoryChart.getData().clear();
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        for (CardPrice price : history) {
+            String date = price.getTimestamp().toLocalDate().toString();
+            series.getData().add(new XYChart.Data<>(date, price.getPrice()));
+        }
+        series.setName("Price");
+        priceHistoryChart.getData().add(series);
     }
 }
 

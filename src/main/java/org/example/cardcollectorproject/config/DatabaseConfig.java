@@ -45,4 +45,8 @@ public class DatabaseConfig {
     public String getCosmosContainerName() {
         return properties.getProperty("azure.cosmos.container");
     }
+
+    public String getCardPriceContainerName() {
+        return properties.getProperty("azure.cosmos.cardprice.container");
+    }
 }

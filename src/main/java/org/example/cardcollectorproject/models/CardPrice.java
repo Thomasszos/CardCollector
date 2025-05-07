@@ -1,17 +1,28 @@
-
 package org.example.cardcollectorproject.models;
 
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CardPrice {
 
-    private Long id;
+    @JsonProperty("id")
+    private String id;
 
+    @JsonProperty("pokemonCard")
     private PokemonCard pokemonCard;
 
+    @JsonProperty("price")
     private double price;
 
+    @JsonProperty("timestamp")
     private LocalDateTime timestamp;
+
+    @JsonProperty("cardprice")
+    private String cardprice;
 
     public CardPrice() {}
 
@@ -19,9 +30,10 @@ public class CardPrice {
         this.pokemonCard = pokemonCard;
         this.price = price;
         this.timestamp = timestamp;
+        this.cardprice = pokemonCard.getCardNumber();
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -48,4 +60,10 @@ public class CardPrice {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
+
+    public void setId(String id) { this.id = id; }
+
+    public String getCardprice() { return cardprice; }
+
+    public void setCardprice(String cardprice) { this.cardprice = cardprice; }
 }
