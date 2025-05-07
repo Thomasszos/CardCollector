@@ -80,4 +80,5 @@ public class PokemonCard {
     public void setSet(String set) {
         this.set = set;
     }
+
 }
