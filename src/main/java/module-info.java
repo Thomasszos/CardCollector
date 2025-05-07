@@ -25,6 +25,9 @@ module org.example.cardcollectorproject {
     requires json.smart;
     requires org.json;
 
+    requires javafx.media;
+
+
     opens org.example.cardcollectorproject to javafx.fxml, com.google.gson;
     opens org.example.cardcollectorproject.controllers to javafx.fxml, com.google.gson;
     opens org.example.cardcollectorproject.models to com.google.gson; // ← this line is required
