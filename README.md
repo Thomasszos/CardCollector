@@ -3,8 +3,6 @@
 
 A comprehensive JavaFX application for Pokémon card collectors to manage, track, and analyze their card collections.
 
-![Card Collector Logo](https://placeholder-for-logo.png)
-
 ## Description
 
 Card Collector is a feature-rich desktop application designed for Pokémon card enthusiasts. It allows users to search for cards, manage their collections, track market prices, and maintain a watchlist for cards they're interested in acquiring. With an intuitive user interface and real-time price data integration, Card Collector helps collectors organize and maximize the value of their collections.
