@@ -1,0 +1,124 @@
+/* Base settings for the dialog - Game Boy style */
+.settings-dialog {
+    -fx-background-color: #0F380F; /* Dark green background */
+    -fx-border-color: #8BFC7E; /* Light green border */
+    -fx-border-width: 2px;
+    -fx-font-family: 'Monaco', 'Consolas', monospace; /* Monospaced font */
+    -fx-text-fill: #8BFC7E; /* Light green text */
+}
+
+/* Style for all labels */
+.settings-dialog .label {
+    -fx-text-fill: #8BFC7E; /* Ensure all labels use light green text */
+    -fx-font-size: 12px; /* Slightly larger default font */
+}
+
+/* Specific style for the main "Settings" title */
+.settings-dialog > .label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #9BBC0F; /* Slightly different green for title */
+    -fx-padding: 0 0 5px 0; /* Add some bottom padding */
+}
+
+/* Separator line style */
+.settings-dialog .separator .line {
+    -fx-border-color: #306230; /* Darker green for separator */
+    -fx-border-width: 1 0 0 0;
+}
+
+/* TitledPane styling */
+.settings-dialog .titled-pane {
+    -fx-text-fill: #0F380F; /* Dark text for contrast on header */
+}
+
+.settings-dialog .titled-pane > .title {
+    -fx-background-color: #8BFC7E; /* Light green background for header */
+    -fx-background-radius: 0; /* Sharp corners */
+    -fx-border-color: #306230; /* Darker green border */
+    -fx-border-width: 1px;
+}
+
+/* Arrow color in TitledPane */
+.settings-dialog .titled-pane > .title > .arrow-button .arrow {
+    -fx-background-color: #0F380F; /* Dark arrow */
+}
+
+.settings-dialog .titled-pane > .content {
+    -fx-background-color: #0F380F; /* Match dialog background */
+    -fx-border-color: #306230; /* Darker green border for content area */
+    -fx-border-width: 0 1px 1px 1px;
+    -fx-padding: 15px; /* Use FXML padding where possible, but CSS can override */
+}
+
+/* Button styling - Blocky Game Boy style */
+.settings-dialog .button {
+    -fx-background-color: #306230; /* Mid-green background */
+    -fx-text-fill: #8BFC7E; /* Light green text */
+    -fx-background-radius: 0; /* Sharp corners */
+    -fx-border-color: #8BFC7E; /* Light green border */
+    -fx-border-width: 1px;
+    -fx-min-width: 80px; /* Ensure buttons have some width */
+    -fx-padding: 5px 10px;
+    -fx-font-size: 12px;
+}
+
+.settings-dialog .button:hover {
+    -fx-background-color: #8BFC7E; /* Light green on hover */
+    -fx-text-fill: #0F380F; /* Dark text on hover */
+}
+
+.settings-dialog .button:pressed {
+    -fx-background-color: #9BBC0F; /* Different green when pressed */
+    -fx-text-fill: #0F380F;
+}
+
+/* Toggle Button styling */
+.settings-dialog .toggle-button {
+    -fx-background-color: #306230; /* Mid-green background */
+    -fx-text-fill: #8BFC7E; /* Light green text */
+    -fx-background-radius: 0; /* Sharp corners */
+    -fx-border-color: #8BFC7E;
+    -fx-border-width: 1px;
+    -fx-min-width: 60px;
+    -fx-font-size: 12px;
+}
+
+/* Style for when Toggle Button is selected (On) */
+.settings-dialog .toggle-button:selected {
+    -fx-background-color: #8BFC7E; /* Light green background when selected */
+    -fx-text-fill: #0F380F; /* Dark text when selected */
+    -fx-border-color: #306230; /* Darker border when selected */
+}
+
+.settings-dialog .toggle-button:hover {
+    -fx-opacity: 0.8; /* Slightly fade on hover */
+}
+
+
+/* Slider styling */
+.settings-dialog .slider .track {
+    -fx-background-color: #306230; /* Mid-green track */
+    -fx-background-radius: 0; /* Sharp corners */
+    -fx-pref-height: 5px; /* Make track thinner */
+}
+
+.settings-dialog .slider .thumb {
+    -fx-background-color: #8BFC7E; /* Light green thumb */
+    -fx-background-radius: 0; /* Square thumb */
+    -fx-padding: 5px; /* Make thumb slightly larger/blockier */
+    -fx-border-color: #0F380F; /* Dark border for thumb */
+    -fx-border-width: 1px;
+}
+
+/* Remove tick marks for a cleaner retro look */
+.settings-dialog .slider .axis {
+    -fx-tick-mark-visible: false;
+    -fx-tick-label-fill: transparent; /* Hide labels if necessary */
+}
+
+/* Style the volume percentage label */
+.settings-dialog #volumeLabel { /* Use ID selector for specificity */
+    -fx-text-fill: #9BBC0F; /* Different green for percentage */
+    -fx-font-size: 10px;
+}

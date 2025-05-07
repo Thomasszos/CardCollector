@@ -7,6 +7,8 @@ import org.example.cardcollectorproject.config.DatabaseConfig;
 import org.example.cardcollectorproject.models.PokemonCard;
 import org.example.cardcollectorproject.models.User;
 import org.example.cardcollectorproject.models.UserCollection;
+import org.example.cardcollectorproject.models.CardPrice;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,7 @@ public class CosmosDbService {
     private final CosmosClient cosmosClient;
     private final CosmosContainer usersContainer;
     private final CosmosContainer collectionsContainer;
+    private final CosmosContainer cardPriceContainer;
 
     public CosmosDbService() {
         DatabaseConfig config = DatabaseConfig.getInstance();
@@ -26,11 +29,11 @@ public class CosmosDbService {
 
         CosmosDatabase database = cosmosClient.getDatabase(config.getCosmosDatabaseName());
         this.usersContainer = database.getContainer(config.getCosmosContainerName());
-
+        this.cardPriceContainer = database.getContainer(config.getCardPriceContainerName());
         // Get or create collections container
         String collectionsContainerName = "collections";
         this.collectionsContainer = getOrCreateCollectionsContainer(database, collectionsContainerName);
-    }
+    }  
 
     /**
      * Gets an existing collections container or creates a new one if it doesn't exist
@@ -166,5 +169,30 @@ public class CosmosDbService {
         } catch (CosmosException e) {
             System.err.println("Error removing card from collection: " + e.getMessage());
         }
+    }
+
+    public void saveCardPrice(CardPrice cardPrice) {
+        try {
+            if (cardPrice.getId() == null) {
+                cardPrice.setId(java.util.UUID.randomUUID().toString());
+            }
+            cardPriceContainer.createItem(cardPrice, new PartitionKey(cardPrice.getCardprice()), new CosmosItemRequestOptions());
+        } catch (CosmosException e) {
+            System.err.println("Error saving card price: " + e.getMessage());
+        }
+    }
+
+    public List<CardPrice> getCardPriceHistory(String cardNumber) {
+        String query = "SELECT * FROM c WHERE c.cardprice = @cardprice ORDER BY c.timestamp";
+        CosmosQueryRequestOptions options = new CosmosQueryRequestOptions();
+        List<SqlParameter> parameters = new ArrayList<>();
+        parameters.add(new SqlParameter("@cardprice", cardNumber));
+        SqlQuerySpec querySpec = new SqlQuerySpec(query, parameters);
+        List<CardPrice> result = new ArrayList<>();
+        CosmosPagedIterable<CardPrice> queryResult = cardPriceContainer.queryItems(querySpec, options, CardPrice.class);
+        for (CardPrice cp : queryResult) {
+            result.add(cp);
+        }
+        return result;
     }
 }

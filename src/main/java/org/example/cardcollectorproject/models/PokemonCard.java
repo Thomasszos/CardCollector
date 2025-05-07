@@ -25,6 +25,10 @@ public class PokemonCard {
         this.set = set;
     }
 
+    public PokemonCard() {
+        // No-arg constructor for deserialization
+    }
+
     public String getName() {
         return name;
     }

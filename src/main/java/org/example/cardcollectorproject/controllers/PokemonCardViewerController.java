@@ -18,11 +18,21 @@ import org.example.cardcollectorproject.api.PokeAPI;
 import org.example.cardcollectorproject.api.TCGio;
 import org.example.cardcollectorproject.models.PokemonCard;
 import org.example.cardcollectorproject.services.CardSearching;
+import org.example.cardcollectorproject.services.PriceTrackingService;
+import org.example.cardcollectorproject.services.CardPriceRepository;
+import org.example.cardcollectorproject.models.CardPrice;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import org.example.cardcollectorproject.utils.AudioManager;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
+import org.example.cardcollectorproject.services.CosmosCardPriceRepository;
+import org.example.cardcollectorproject.services.CosmosDbService;
 
 public class PokemonCardViewerController implements Initializable {
 
@@ -48,10 +58,19 @@ public class PokemonCardViewerController implements Initializable {
     @FXML private Label pageInfoLabel;
     @FXML private Button addToCollectionButton;
     @FXML private Button addToWatchlistButton;
+    @FXML private LineChart<String, Number> priceHistoryChart;
+    @FXML private VBox priceHistoryContainer;
 
     private final List<PokemonCard> cards = new ArrayList<>();
     private final CardSearching cardService = new CardSearching();
     private final ContextMenu autoCompletePopup = new ContextMenu();
+
+    private final PriceTrackingService priceTrackingService = new PriceTrackingService(
+        new CosmosCardPriceRepository(new CosmosDbService())
+    );
+
+    private final AudioManager audioManager = AudioManager.getInstance();
+
 
     private int currentPage = 1;
     private final int pageSize = 10;
@@ -74,18 +93,40 @@ public class PokemonCardViewerController implements Initializable {
         sortOptions.getItems().addAll("Name", "Type");
         sortOptions.setValue("Name");
 
+
+
+        // Add click sound to search field Enter key action
+        searchField.setOnAction(e -> {
+            
+            searchCards();
+        });
+
         searchButton.setOnAction(e -> {
+            playButtonClickSound();
             currentPage = 1;
             searchCards();
         });
         searchField.setOnAction(e -> {
+          playButtonClickSound();
             currentPage = 1;
             searchCards();
         });
         searchField.textProperty().addListener((obs, oldText, newText) -> showAutoCompleteSuggestions(newText));
 
-        sortOptions.setOnAction(e -> sortAndDisplayCards());
-        closeButton.setOnAction(e -> hideCardDetail());
+        // Add click sound to sort options
+        sortOptions.setOnAction(e -> {
+            playButtonClickSound();
+            sortAndDisplayCards();
+        });
+
+        // Add click sound to close button
+        closeButton.setOnAction(e -> {
+            playButtonClickSound();
+            hideCardDetail();
+        });
+
+        // Add click sound to searchCriteriaBox
+        searchCriteriaBox.setOnAction(e -> playButtonClickSound());
 
         prevPageButton.setOnAction(e -> {
             if (currentPage > 1) {
@@ -182,6 +223,7 @@ public class PokemonCardViewerController implements Initializable {
         });
     }
 
+
     private void showSuccessAlert(String destination, String cardName, boolean isRemoval) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         if (isRemoval) {
@@ -197,6 +239,12 @@ public class PokemonCardViewerController implements Initializable {
         // Auto-close the alert after 2 seconds
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> alert.close()));
         timeline.play();
+    }
+    /**
+     * Play the button click sound effect
+     */
+    private void playButtonClickSound() {
+        audioManager.playSoundEffect("clicks.wav");
     }
 
     private void searchCards() {
@@ -237,6 +285,7 @@ public class PokemonCardViewerController implements Initializable {
     private void handleCardClick(MouseEvent event) {
         selectedCard = listView.getSelectionModel().getSelectedItem();
         if (selectedCard != null) {
+            playButtonClickSound();
             showCardDetail(selectedCard);
         }
     }
@@ -264,6 +313,9 @@ public class PokemonCardViewerController implements Initializable {
         new Thread(() -> {
             double price = TCGio.fetchCardPrice(card.getCardNumber()).join();
             Platform.runLater(() -> priceLabel.setText(String.format("Price: $%.2f", price)));
+            priceTrackingService.savePriceForCard(card, price);
+            List<CardPrice> history = priceTrackingService.getPriceHistory(card);
+            Platform.runLater(() -> updatePriceHistoryChart(history));
         }).start();
 
         descriptionLabel.setText("Loading description...");
@@ -277,6 +329,8 @@ public class PokemonCardViewerController implements Initializable {
 
         cardDetailBox.setVisible(true);
         cardDetailBox.setManaged(true);
+        priceHistoryContainer.setVisible(true);
+        priceHistoryContainer.setManaged(true);
 
         // Check if the card is already in the collection or watchlist
         List<PokemonCard> collection = cardService.getCollection();
@@ -324,6 +378,8 @@ public class PokemonCardViewerController implements Initializable {
     private void hideCardDetail() {
         cardDetailBox.setVisible(false);
         cardDetailBox.setManaged(false);
+        priceHistoryContainer.setVisible(false);
+        priceHistoryContainer.setManaged(false);
     }
 
     private void showAutoCompleteSuggestions(String query) {
@@ -358,6 +414,7 @@ public class PokemonCardViewerController implements Initializable {
         for (String suggestion : suggestions.subList(0, Math.min(suggestions.size(), 5))) {
             MenuItem item = new MenuItem(suggestion);
             item.setOnAction(e -> {
+                playButtonClickSound();
                 searchField.setText(suggestion);
                 searchCards();
             });
@@ -367,4 +424,17 @@ public class PokemonCardViewerController implements Initializable {
         autoCompletePopup.getItems().setAll(menuItems);
         autoCompletePopup.show(searchField, javafx.geometry.Side.BOTTOM, 0, 0);
     }
+
+
+    private void updatePriceHistoryChart(List<CardPrice> history) {
+        priceHistoryChart.getData().clear();
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        for (CardPrice price : history) {
+            String date = price.getTimestamp().toLocalDate().toString();
+            series.getData().add(new XYChart.Data<>(date, price.getPrice()));
+        }
+        series.setName("Price");
+        priceHistoryChart.getData().add(series);
+    }
 }
+
