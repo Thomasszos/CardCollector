@@ -10,6 +10,11 @@ public class PokemonCard {
     String cardNumber;
     String set;
 
+    // Default constructor needed for Jackson deserialization
+    public PokemonCard() {
+        // Empty constructor required for JSON deserialization
+    }
+
     public PokemonCard(String name, String imageUrl, String cardType, String mechanic, String moves, String cardNumber, String set) {
         this.name = name;
         this.imageUrl = imageUrl;
@@ -57,7 +62,8 @@ public class PokemonCard {
     }
 
     public String getMoves() {
-        return moves;}
+        return moves;
+    }
 
     public void setMoves(String moves) {
         this.moves = moves;
@@ -72,8 +78,11 @@ public class PokemonCard {
     }
 
     public String getSet() {
-        return set;}
+        return set;
+    }
 
     public void setSet(String set) {
-        this.set = set;}
+        this.set = set;
+    }
+
 }

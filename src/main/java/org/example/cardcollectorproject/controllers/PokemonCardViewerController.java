@@ -76,6 +76,15 @@ public class PokemonCardViewerController implements Initializable {
     private final int pageSize = 10;
     private PokemonCard selectedCard;
 
+    private CollectionController collectionController;
+
+    // Then add a setter method so the main application can set the reference
+    public void setCollectionController(CollectionController collectionController) {
+        this.collectionController = collectionController;
+    }
+
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         searchCriteriaBox.getItems().addAll("Name", "Type", "ID", "Set");
@@ -133,13 +142,53 @@ public class PokemonCardViewerController implements Initializable {
 
         addToCollectionButton.setOnAction(e -> {
             if (selectedCard != null) {
-                cardService.addToCollection(selectedCard);
+                List<PokemonCard> collection = cardService.getCollection();
+                boolean isInCollection = collection.stream()
+                        .anyMatch(c -> c.getCardNumber().equals(selectedCard.getCardNumber()));
+
+                if (isInCollection) {
+                    // Remove from collection
+                    cardService.removeFromCollection(selectedCard.getCardNumber());
+                    addToCollectionButton.setText("Add to Collection");
+                    addToCollectionButton.setStyle("");
+                    showSuccessAlert("Collection", selectedCard.getName(), true);
+                } else {
+                    // Add to collection
+                    cardService.addToCollection(selectedCard);
+                    addToCollectionButton.setText("Remove from Collection");
+                    addToCollectionButton.setStyle("-fx-background-color: #ff6b6b;");
+                    showSuccessAlert("Collection", selectedCard.getName(), false);
+                }
+
+                // Refresh the collection view if available
+                CollectionController collectionController = CollectionController.getInstance();
+                if (collectionController != null) {
+                    collectionController.refreshCollection();
+                }
             }
         });
 
+
+
         addToWatchlistButton.setOnAction(e -> {
             if (selectedCard != null) {
-                cardService.addToWatchlist(selectedCard);
+                List<PokemonCard> watchlist = cardService.getWatchlist();
+                boolean isInWatchlist = watchlist.stream()
+                        .anyMatch(c -> c.getCardNumber().equals(selectedCard.getCardNumber()));
+
+                if (isInWatchlist) {
+                    // Remove from watchlist
+                    cardService.removeFromWatchlist(selectedCard.getCardNumber());
+                    addToWatchlistButton.setText("Add to Watchlist");
+                    addToWatchlistButton.setStyle("");
+                    showSuccessAlert("Watchlist", selectedCard.getName(), true);
+                } else {
+                    // Add to watchlist
+                    cardService.addToWatchlist(selectedCard);
+                    addToWatchlistButton.setText("Remove from Watchlist");
+                    addToWatchlistButton.setStyle("-fx-background-color: #ff6b6b;");
+                    showSuccessAlert("Watchlist", selectedCard.getName(), false);
+                }
             }
         });
 
@@ -174,6 +223,23 @@ public class PokemonCardViewerController implements Initializable {
         });
     }
 
+
+    private void showSuccessAlert(String destination, String cardName, boolean isRemoval) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        if (isRemoval) {
+            alert.setTitle("Card Removed");
+            alert.setContentText(cardName + " has been removed from your " + destination + "!");
+        } else {
+            alert.setTitle("Card Added");
+            alert.setContentText(cardName + " has been added to your " + destination + "!");
+        }
+        alert.setHeaderText(null);
+        alert.show();
+
+        // Auto-close the alert after 2 seconds
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> alert.close()));
+        timeline.play();
+    }
     /**
      * Play the button click sound effect
      */
@@ -265,6 +331,34 @@ public class PokemonCardViewerController implements Initializable {
         cardDetailBox.setManaged(true);
         priceHistoryContainer.setVisible(true);
         priceHistoryContainer.setManaged(true);
+
+        // Check if the card is already in the collection or watchlist
+        List<PokemonCard> collection = cardService.getCollection();
+        boolean isInCollection = collection.stream()
+                .anyMatch(c -> c.getCardNumber().equals(card.getCardNumber()));
+
+        if (isInCollection) {
+            addToCollectionButton.setText("Remove from Collection");
+            addToCollectionButton.setStyle("-fx-background-color: #ff6b6b;");
+        } else {
+            addToCollectionButton.setText("Add to Collection");
+            addToCollectionButton.setStyle("");
+        }
+
+
+        List<PokemonCard> watchlist = cardService.getWatchlist();
+        boolean isInWatchlist = watchlist.stream()
+                .anyMatch(c -> c.getCardNumber().equals(card.getCardNumber()));
+
+        if (isInWatchlist) {
+            addToWatchlistButton.setText("Remove from Watchlist");
+            addToWatchlistButton.setStyle("-fx-background-color: #ff6b6b;");
+        } else {
+            addToWatchlistButton.setText("Add to Watchlist");
+            addToWatchlistButton.setStyle("");
+        }
+
+
     }
 
     private void animateDescription(String text) {
@@ -330,6 +424,7 @@ public class PokemonCardViewerController implements Initializable {
         autoCompletePopup.getItems().setAll(menuItems);
         autoCompletePopup.show(searchField, javafx.geometry.Side.BOTTOM, 0, 0);
     }
+
 
     private void updatePriceHistoryChart(List<CardPrice> history) {
         priceHistoryChart.getData().clear();

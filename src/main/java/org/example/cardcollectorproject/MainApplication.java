@@ -13,6 +13,7 @@ import java.io.IOException;
 public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+
         try {
             // Start background music
             AudioManager.getInstance().playBackgroundMusic("background_music.mp3");
@@ -39,6 +40,7 @@ public class MainApplication extends Application {
             stage.setResizable(false);
             stage.centerOnScreen();
             stage.show();
+
 
             // Stop music when application closes
             stage.setOnCloseRequest(event -> {
