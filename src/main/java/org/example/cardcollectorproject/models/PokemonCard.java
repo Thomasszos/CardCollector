@@ -21,6 +21,7 @@ public class PokemonCard {
     }
 
     public PokemonCard() {
+        // No-arg constructor for deserialization
     }
 
     public String getName() {

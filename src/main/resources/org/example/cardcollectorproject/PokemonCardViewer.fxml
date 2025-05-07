@@ -42,8 +42,8 @@
     </left>
 
     <center>
-        <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER">
-            <HBox spacing="20">
+        <HBox spacing="20">
+            <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" prefWidth="400">
                 <VBox fx:id="cardDetailBox" spacing="10" visible="false" managed="false">
                     <padding>
                         <Insets top="10" right="10" bottom="10" left="10"/>
@@ -65,7 +65,13 @@
                     <Label fx:id="cardNumberLabel"/>
                     <Label fx:id="descriptionLabel" wrapText="true" maxWidth="300"/>
                 </VBox>
-                <LineChart fx:id="priceHistoryChart" title="Price History" minWidth="400">
+            </ScrollPane>
+            
+            <VBox fx:id="priceHistoryContainer" visible="false" managed="false" prefWidth="500">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <LineChart fx:id="priceHistoryChart" title="Price History" prefHeight="400">
                     <xAxis>
                         <CategoryAxis label="Date"/>
                     </xAxis>
@@ -73,8 +79,8 @@
                         <NumberAxis label="Price ($)"/>
                     </yAxis>
                 </LineChart>
-            </HBox>
-        </ScrollPane>
+            </VBox>
+        </HBox>
     </center>
 
 </BorderPane>

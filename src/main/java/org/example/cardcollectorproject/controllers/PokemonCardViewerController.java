@@ -58,6 +58,7 @@ public class PokemonCardViewerController implements Initializable {
     @FXML private Button addToCollectionButton;
     @FXML private Button addToWatchlistButton;
     @FXML private LineChart<String, Number> priceHistoryChart;
+    @FXML private VBox priceHistoryContainer;
 
     private final List<PokemonCard> cards = new ArrayList<>();
     private final CardSearching cardService = new CardSearching();
@@ -227,8 +228,8 @@ public class PokemonCardViewerController implements Initializable {
 
         cardDetailBox.setVisible(true);
         cardDetailBox.setManaged(true);
-        priceHistoryChart.setVisible(true);
-        priceHistoryChart.setManaged(true);
+        priceHistoryContainer.setVisible(true);
+        priceHistoryContainer.setManaged(true);
     }
 
     private void animateDescription(String text) {
@@ -248,8 +249,8 @@ public class PokemonCardViewerController implements Initializable {
     private void hideCardDetail() {
         cardDetailBox.setVisible(false);
         cardDetailBox.setManaged(false);
-        priceHistoryChart.setVisible(false);
-        priceHistoryChart.setManaged(false);
+        priceHistoryContainer.setVisible(false);
+        priceHistoryContainer.setManaged(false);
     }
 
     private void showAutoCompleteSuggestions(String query) {
