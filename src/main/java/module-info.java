@@ -21,7 +21,12 @@ module org.example.cardcollectorproject {
     requires java.desktop;
     requires java.smartcardio;
     requires spring.data.commons;
+    requires java.sql;
+    requires json.smart;
+    requires org.json;
+
     requires javafx.media;
+
 
     opens org.example.cardcollectorproject to javafx.fxml, com.google.gson;
     opens org.example.cardcollectorproject.controllers to javafx.fxml, com.google.gson;
