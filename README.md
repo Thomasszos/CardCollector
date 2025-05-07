@@ -114,20 +114,6 @@ Card Collector is a feature-rich desktop application designed for Pokémon card 
 2. Monitor prices in the Watchlist tab
 3. Transfer cards to your collection when ready to acquire them
 
-## Screenshots
-
-![Login Screen](https://placeholder-for-screenshot1.png)
-*Login screen with animated background*
-
-![Card Search](https://placeholder-for-screenshot2.png)
-*Card search interface with results*
-
-![Collection View](https://placeholder-for-screenshot3.png)
-*Collection management with filtering options*
-
-![Card Details](https://placeholder-for-screenshot4.png)
-*Detailed card view with price history*
-
 ## Future Enhancements
 
 - Mobile companion app for on-the-go collection management
@@ -136,16 +122,6 @@ Card Collector is a feature-rich desktop application designed for Pokémon card 
 - Advanced analytics and investment recommendations
 - Barcode/image scanning for physical cards
 - Export/import functionality for collection backup
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## License
 
