@@ -10,7 +10,7 @@ public class PokemonCard {
     String cardNumber;
     String set;
 
-    // Default constructor needed for Jackson deserialization
+   // Default constructor needed for Jackson deserialization
     public PokemonCard() {
         // Empty constructor required for JSON deserialization
     }
