@@ -67,7 +67,7 @@
                 </VBox>
             </ScrollPane>
             
-            <VBox fx:id="priceHistoryContainer" visible="false" managed="false" prefWidth="500">
+            <VBox fx:id="priceHistoryContainer" visible="false" managed="false" prefWidth="500" style="-fx-background-color: white;">
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
                 </padding>
