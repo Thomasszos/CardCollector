@@ -77,10 +77,15 @@ public class PokemonCardViewerController implements Initializable {
     private PokemonCard selectedCard;
 
     private CollectionController collectionController;
+    private WatchlistController watchlistController;
 
     // Then add a setter method so the main application can set the reference
     public void setCollectionController(CollectionController collectionController) {
         this.collectionController = collectionController;
+    }
+
+    public void setWatchlistController(WatchlistController watchlistController) {
+        this.watchlistController = watchlistController;
     }
 
 
@@ -97,7 +102,7 @@ public class PokemonCardViewerController implements Initializable {
 
         // Add click sound to search field Enter key action
         searchField.setOnAction(e -> {
-            
+
             searchCards();
         });
 
@@ -188,6 +193,12 @@ public class PokemonCardViewerController implements Initializable {
                     addToWatchlistButton.setText("Remove from Watchlist");
                     addToWatchlistButton.setStyle("-fx-background-color: #ff6b6b;");
                     showSuccessAlert("Watchlist", selectedCard.getName(), false);
+                }
+
+                // Refresh the watchlist view if available
+                WatchlistController watchlistController = WatchlistController.getInstance();
+                if (watchlistController != null) {
+                    watchlistController.refreshWatchlist();
                 }
             }
         });
@@ -437,4 +448,3 @@ public class PokemonCardViewerController implements Initializable {
         priceHistoryChart.getData().add(series);
     }
 }
-
